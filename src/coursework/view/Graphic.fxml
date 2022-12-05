@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import jfxtras.scene.control.gauge.linear.SimpleMetroArcGauge?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<BorderPane fx:id="graphBoarderpane" prefHeight="651.0" prefWidth="1000.0" style="-fx-background-color: white;" stylesheets="@../css/dashBoard.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="coursework.controller.GraphicController">
+    <top>
+        <VBox prefHeight="69.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
+            <children>
+                <BorderPane maxHeight="67.0" prefHeight="34.0" prefWidth="1000.0" style="-fx-background-color: white;">
+                    <bottom>
+                        <VBox BorderPane.alignment="CENTER">
+                            <children>
+                                <HBox prefHeight="3.0" prefWidth="957.0" style="-fx-background-color: #efefef;" />
+                                <Label prefHeight="73.0" prefWidth="300.0" style="-fx-border-color: #c08edc; -fx-border-radius: 0; -fx-border-width: 2; -fx-background-color: #c08edc;" text="Статистика" textFill="#224132">
+                                    <font>
+                                        <Font name="Arial Bold" size="39.0" />
+                                    </font>
+                                    <padding>
+                                        <Insets left="30.0" right="10"/>
+                                    </padding>
+                                </Label>
+                            </children>
+                        </VBox>
+                    </bottom>
+                </BorderPane>
+            </children>
+        </VBox>
+    </top>
+    <center>
+        <VBox prefHeight="401.0" prefWidth="500.0" BorderPane.alignment="CENTER">
+            <children>
+                <BarChart fx:id="barchart" title="" VBox.vgrow="ALWAYS">
+                    <xAxis>
+                        <CategoryAxis animated="false" side="LEFT" fx:id="xAxis">
+                            <tickLabelFont>
+                                <Font size="13.0" />
+                            </tickLabelFont>
+                        </CategoryAxis>
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis fx:id="yAxis" label="Количество товаров и клиентов" side="LEFT">
+                            <tickLabelFont>
+                                <Font size="13.0" />
+                            </tickLabelFont>
+                        </NumberAxis>
+                    </yAxis>
+                    <VBox.margin>
+                        <Insets top="10.0" />
+                    </VBox.margin>
+                </BarChart>
+            </children>
+        </VBox>
+    </center>
+
+</BorderPane>

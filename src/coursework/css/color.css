@@ -1,0 +1,10 @@
+.chart {
+    -fx-padding: 10px;
+    -fx-background-color: rgba(186, 252, 228, 0.4);
+}
+.default-color0.chart-bar {
+    -fx-bar-fill: rgba(90, 90, 180, 0.44)
+}
+.default-color1.chart-bar {
+    -fx-bar-fill: pink
+}

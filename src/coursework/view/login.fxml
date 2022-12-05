@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.effect.DropShadow?>
+<?import com.jfoenix.controls.JFXBadge?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.geometry.Insets?>
+<AnchorPane id="AnchorPane" fx:id="parentroot" prefHeight="450.0" prefWidth="800.0" styleClass="mainFxmlClass" stylesheets="@../css/login.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="coursework.controller.loginController">
+   <Pane fx:id="ColorPane" prefHeight="450.0" prefWidth="800.0" style="-fx-background-color: linear-gradient(to right, #bc9ce8 , #c3a3ea); ">
+      <effect>
+         <DropShadow blurType="GAUSSIAN" color="#363636" height="27.99" offsetX="8.0" radius="20.4925" width="55.98" />
+      </effect>
+   </Pane>
+   <children>
+      <Label fx:id="welcome" layoutX="140.0" layoutY="49.0" prefHeight="57.0" prefWidth="230.0" text="Добро Пожаловать">
+         <font>
+            <Font name="Arial Bold" size="22.0" />
+         </font>
+      </Label>
+      <Label fx:id="userLogin" layoutX="208.0" layoutY="98.0" text="Вход">
+         <font>
+            <Font name="Segoe UI Light" size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="username" layoutX="35.0" layoutY="140.0" text="Логин :">
+         <font>
+            <Font name="Segoe UI Light" size="16.0" />
+         </font>
+      </Label>
+      <JFXTextField fx:id="usernameTextField" focusColor="#224132" layoutX="129.0" layoutY="138.0" prefHeight="30.0" prefWidth="279.0" >
+         <font>
+            <Font name="Segoe UI Light" size="14.0" />
+         </font>
+      </JFXTextField>
+      <Label fx:id="password" layoutX="35.0" layoutY="179.0" text="Пароль :">
+         <font>
+            <Font name="Segoe UI Light" size="16.0" />
+         </font>
+      </Label>
+      <JFXButton fx:id="login" layoutX="364.0" layoutY="216.0" onAction="#login" prefHeight="25.0" prefWidth="118.0" style="-fx-border-color: #ffffff;" text="Войти" >
+         <font>
+            <Font name="Segoe UI Light" size="13.0" />
+         </font>
+      </JFXButton>
+      <JFXPasswordField fx:id="passwordTextField" focusColor="#224132" layoutX="129.0" layoutY="179.0" onKeyPressed="#signIn" prefHeight="25.0" prefWidth="279.0" >
+         <font>
+            <Font name="Segoe UI Light" size="14.0" />
+         </font>
+      </JFXPasswordField>
+      <Label fx:id="minimize" layoutX="320.0" layoutY="273.0" onMouseClicked="#loadPasswordRetrivalPanel" text="Забыли пароль?" >
+         <font>
+            <Font name="Segoe UI Light" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="close" layoutX="320.0" layoutY="293.0" onMouseClicked="#createAccount" text="Зарегестрироваться" >
+         <font>
+            <Font name="Segoe UI Light" size="14.0" />
+         </font>
+      </Label>
+   </children>
+   <Pane fx:id="ColoPane" prefHeight="450.0" prefWidth="300.0" style="-fx-background-color: linear-gradient(to right, rgb(255,255,255) , #c08edc); -fx-background-radius: 20 0 0 20;" AnchorPane.rightAnchor="0.0">
+      <VBox alignment="CENTER" prefHeight="30.0" prefWidth="240.0">
+         <children>
+            <Text fill="#224132" strokeType="OUTSIDE" strokeWidth="0.0" text="Это приложение для быстрого и удобного складского учёта" textAlignment="CENTER"  wrappingWidth="265.9931640625" >
+               <font>
+                  <Font name="Segoe UI Light" size="17.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="110.0" />
+               </VBox.margin>
+            </Text>
+         </children></VBox>
+      <VBox alignment="CENTER" prefHeight="30.0" prefWidth="170.0">
+         <children>
+            <Text fill="#224132" strokeType="OUTSIDE" strokeWidth="0.0" text="CoraliHouse" textAlignment="CENTER"  wrappingWidth="277.9931640625">
+               <font>
+                  <Font name="Arial Bold" size="29.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="160.0" />
+               </VBox.margin>
+            </Text>
+         </children></VBox>
+   </Pane>
+</AnchorPane>

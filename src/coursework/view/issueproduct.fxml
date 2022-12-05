@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane prefHeight="651.0" prefWidth="1000.0" style="-fx-background-color: white;" stylesheets="@../css/issuebook.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="coursework.controller.issueProduct">
+    <right>
+        <HBox prefHeight="651.0" prefWidth="200.0"  style="-fx-background-color: #c08edc;"></HBox>
+    </right>
+    <top>
+        <VBox prefHeight="123.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
+            <children>
+                <VBox prefHeight="117.0" prefWidth="1000.0" style="-fx-background-color: white;">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" prefHeight="120.0" prefWidth="953.0" spacing="10.0">
+                            <children>
+                                <Label prefHeight="73.0" prefWidth="400.0" style="-fx-border-color: #c08edc; -fx-border-radius: 0; -fx-border-width: 2; -fx-background-color: #c08edc;" text="Работа с заказами" textFill="#224132">
+                                    <font>
+                                        <Font name="Arial Bold" size="35.0" />
+                                    </font>
+                                    <padding>
+                                        <Insets left="30.0" right="10"/>
+                                    </padding>
+                                </Label>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+    </top>
+    <left>
+        <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+            <children>
+                <HBox>
+                    <children>
+                        <VBox alignment="CENTER" prefHeight="160.0" prefWidth="478.5">
+                            <children>
+                                <JFXTextField fx:id="bookSearchField"  maxWidth="360.0" minWidth="360.0" onKeyReleased="#searchBook" promptText="Введите номер товара на складе">
+                                    <font>
+                                        <Font name="Arial Bold" size="14.0" />
+                                    </font>
+                                </JFXTextField>
+                            </children>
+                        </VBox>
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="160.0" prefWidth="350.5" spacing="10.0">
+                            <children>
+                                <Text fx:id="bookName" strokeType="OUTSIDE" strokeWidth="0.0" text="Наименование" textAlignment="CENTER" >
+                                    <font>
+                                        <Font name="Arial Bold" size="14.0" />
+                                    </font>
+                                </Text>
+                                <Text fx:id="bookAuthor" layoutX="237.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Тип" >
+                                    <font>
+                                        <Font name="Arial Bold" size="14.0" />
+                                    </font>
+                                </Text>
+                                <Text fx:id="bookPublisher" layoutX="237.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Страна производства" >
+                                    <font>
+                                        <Font name="Arial Bold" size="14.0" />
+                                    </font>
+                                </Text>
+                                <Text fx:id="availability" layoutX="211.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Наличие">
+                                    <font>
+                                        <Font name="Arial Bold" size="14.0" />
+                                    </font>
+                                </Text>
+                            </children></VBox>
+                    </children>
+                    <VBox.margin>
+                        <Insets left="1.0" right="1.0" top="2.0" />
+                    </VBox.margin>
+                </HBox>
+                <HBox >
+                    <children>
+                        <VBox alignment="CENTER" prefHeight="160.0" prefWidth="478.5">
+                            <children>
+                                <JFXTextField fx:id="studentSearchTextField"  maxWidth="360.0" minWidth="360.0" onKeyPressed="#searchStudent"  promptText="Введите номер клиента">
+                                    <font>
+                                        <Font name="Arial Bold" size="14.0" />
+                                    </font>
+                                </JFXTextField>
+                            </children>
+                        </VBox>
+                        <VBox alignment="CENTER" layoutX="0.0" layoutY="0.0" prefHeight="160.0" prefWidth="100.5" spacing="10.0">
+                            <children>
+                                <Text fx:id="studentName" strokeType="OUTSIDE" strokeWidth="0.0" text="Имя">
+                                    <font>
+                                        <Font name="Arial Bold" size="14.0" />
+                                    </font>
+                                </Text>
+                                <Text fx:id="studentEmail" layoutX="100.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Почта">
+                                    <font>
+                                        <Font name="Arial Bold" size="14.0" />
+                                    </font>
+                                </Text>
+                                <Text fx:id="contact" layoutX="100.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Номер телефона">
+                                    <font>
+                                        <Font name="Arial Bold" size="14.0" />
+                                    </font>
+                                </Text>
+                            </children>
+                        </VBox>
+                    </children>
+                    <VBox.margin>
+                        <Insets left="1.0" right="1.0" top="2.0" />
+                    </VBox.margin>
+                </HBox>
+                <HBox alignment="BOTTOM_CENTER" layoutX="11.0" layoutY="210.0" prefHeight="33.0" prefWidth="992.0" spacing="5.0" />
+                <HBox alignment="CENTER_LEFT" prefHeight="75.0" prefWidth="949.0" spacing="10.0">
+                    <children>
+                        <JFXButton layoutX="150.0" layoutY="55.0"  onAction="#cancel" prefHeight="31.0" prefWidth="167.0" text="Отмена">
+                            <font>
+                                <Font name="Arial Bold" size="15.0" />
+                            </font>
+                        </JFXButton>
+                        <JFXButton fx:id="issueBook" onAction="#issueBook" prefHeight="31.0" prefWidth="167.0" text="Выдать">
+                            <font>
+                                <Font name="Arial Bold" size="15.0" />
+                            </font>
+                        </JFXButton>
+                    </children>
+                </HBox>
+            </children>
+            <BorderPane.margin>
+                <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+            </BorderPane.margin>
+        </VBox>
+    </left>
+    <right>
+        <HBox prefHeight="401.0" prefWidth="500.0" BorderPane.alignment="CENTER">
+            <children>
+                <VBox prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                    <children>
+                        <TableView fx:id="longTermBooksTable" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                            <columns>
+                                <TableColumn fx:id="lStudentName" prefWidth="75.0" text="Клиент" />
+                                <TableColumn fx:id="iBookName" prefWidth="75.0" text="Название товара" />
+                            </columns>
+                            <VBox.margin>
+                                <Insets bottom="4.0" left="4.0" right="4.0" />
+                            </VBox.margin>
+                            <columnResizePolicy>
+                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                            </columnResizePolicy>
+                        </TableView>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </right>
+
+</BorderPane>
+

@@ -1,0 +1,25 @@
+
+.default-color0.chart-series-line {
+    -fx-stroke: #c08edc;
+}
+
+.default-color0.chart-line-symbol {
+    -fx-background-color: #c3a3ea, #c08edc;
+}
+.default-color0.chart-series-area-line { -fx-stroke: #c3a3ea; }
+.default-color0.chart-area-symbol { -fx-background-color: #c08edc, #c3a3ea; }
+#close:hover{
+    -fx-background-color:#F44336;
+}
+
+#fullscreen:hover{
+    -fx-background-image:url('/coursework/images/fullscreen-hover.png');
+}
+
+#unfullscreen:hover{
+    -fx-background-image:url('/coursework/images/unfullscreen-hover.png');
+}
+
+#minimise:hover{
+    -fx-background-image:url('/coursework/images/minimize-hover.png');
+}

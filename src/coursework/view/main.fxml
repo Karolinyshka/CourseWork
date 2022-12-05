@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="borderpane" onMouseDragged="#stageDragged" onMousePressed="#stagePressed" prefHeight="651.0" prefWidth="1141.0" style="-fx-border-color: #ffffff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="coursework.controller.mainController">
+   <left>
+      <VBox fx:id="homeButtonsPanel" maxWidth="250.0" minWidth="250.0" prefHeight="250.0" prefWidth="500.0" stylesheets="@../css/main.css" BorderPane.alignment="CENTER">
+         <children>
+            <JFXButton fx:id="back" contentDisplay="GRAPHIC_ONLY" onAction="#logout" prefHeight="43.0" prefWidth="43.0" ripplerFill="#224132"
+                       style="-fx-border-color: #c3a3ea; -fx-border-radius: 2000; -fx-border-width: 2;">
+               <VBox.margin>
+                  <Insets left="20.0" top="10.0" />
+               </VBox.margin>
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="CLOSE" rotate="180.0" size="25" />
+               </graphic>
+            </JFXButton>
+            <JFXButton fx:id="home" alignment="TOP_LEFT" layoutX="11.0" layoutY="323.0" onAction="#loadHomePanel" prefHeight="40.0" prefWidth="300.0" text="Работа с товарами" textAlignment="JUSTIFY" textFill="WHITE">
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="LIST" size="22" />
+               </graphic>
+               <font>
+                  <Font name="Arial Bold" size="16.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="1.0" right="1.0" top="20.0" />
+               </VBox.margin>
+            </JFXButton>
+            <JFXButton fx:id="students" alignment="TOP_LEFT" layoutX="10.0" layoutY="87.0" onAction="#loadStudentPanel" prefHeight="40.0" prefWidth="300.0" text="Работа с клиентами" textFill="WHITE">
+               <font>
+                  <Font name="Arial Bold" size="16.0" />
+               </font>
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="LIST" size="22" />
+               </graphic>
+               <VBox.margin>
+                  <Insets left="1.0" right="1.0" />
+               </VBox.margin>
+            </JFXButton>
+            <JFXButton fx:id="issuedBooks" alignment="TOP_LEFT" layoutX="10.0" layoutY="124.0" onAction="#loadIssueBooksPanel" prefHeight="40.0" prefWidth="300.0" text="Работа с заказами" textAlignment="JUSTIFY" textFill="WHITE">
+               <font>
+                  <Font name="Arial Bold" size="16.0" />
+               </font>
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="LIST" size="22" />
+               </graphic>
+               <VBox.margin>
+                  <Insets left="1.0" right="1.0" />
+               </VBox.margin>
+            </JFXButton>
+            <JFXButton fx:id="retunbooks" alignment="TOP_LEFT" layoutX="10.0" layoutY="161.0"  prefHeight="40.0" prefWidth="300.0" text="Работа с поставщиками" textAlignment="JUSTIFY" textFill="WHITE">
+               <font>
+                  <Font name="Arial Bold" size="16.0" />
+               </font>
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="LIST" size="22" />
+               </graphic>
+               <VBox.margin>
+                  <Insets left="1.0" right="1.0" />
+               </VBox.margin>
+            </JFXButton>
+            <JFXButton fx:id="allIssuedBooks" alignment="TOP_LEFT" layoutX="11.0" layoutY="203.0" onAction="#loadStaticPanel" prefHeight="40.0" prefWidth="300.0" text="Статистика" textAlignment="JUSTIFY" textFill="WHITE">
+               <font>
+                  <Font name="Arial Bold" size="16.0" />
+               </font>
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="LIST" size="22" />
+               </graphic>
+            </JFXButton>
+            <JFXButton fx:id="announcement" alignment="TOP_LEFT" layoutX="11.0" layoutY="363.0" onAction="#loadPro" prefHeight="40.0" prefWidth="300.0" text="Запись" textAlignment="JUSTIFY" textFill="WHITE">
+               <font>
+                  <Font name="Arial Bold" size="16.0" />
+               </font>
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="LIST" size="22" />
+               </graphic>
+            </JFXButton>
+            <JFXButton fx:id="clearance" alignment="TOP_LEFT" layoutX="10.0" layoutY="363.0"  prefHeight="40.0" prefWidth="300.0" onAction="#loadSettingsPanel" text="Настройки" textAlignment="JUSTIFY" textFill="WHITE">
+               <font>
+                  <Font name="Arial Bold" size="16.0" />
+               </font>
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="LIST" size="22" />
+               </graphic>
+            </JFXButton>
+            <JFXButton fx:id="close" alignment="TOP_LEFT" layoutX="10.0" layoutY="285.0" onAction="#closeApp" prefHeight="40.0" prefWidth="300.0" text="Выход" textAlignment="JUSTIFY" textFill="WHITE">
+               <font>
+                  <Font name="Arial Bold"  size="16.0" />
+               </font>
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="MAIL_FORWARD" size="15" />
+               </graphic>
+               <VBox.margin>
+                  <Insets left="1.0" right="1.0" />
+               </VBox.margin>
+            </JFXButton>
+         </children>
+      </VBox>
+   </left>
+</BorderPane>

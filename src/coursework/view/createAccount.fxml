@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import javafx.scene.layout.Pane?>
+<AnchorPane id="AnchorPane" prefHeight="450.0" prefWidth="800.0" style="-fx-background-color: #c3a3ea;" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="coursework.controller.createAccountController">
+   <children>
+
+      <JFXTextField fx:id="name" layoutX="82.0" layoutY="100.0" focusColor="#224132" prefHeight="25.0" prefWidth="346.0" promptText="Имя" style="-fx-background-radius: 0;">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="surname" layoutX="82.0" layoutY="140.0" focusColor="#224132" prefHeight="25.0" prefWidth="346.0" promptText="Фамилия" style="-fx-background-radius: 0;">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="username" layoutX="82.0" layoutY="180.0" focusColor="#224132" prefHeight="25.0" prefWidth="346.0" promptText="Логин" style="-fx-background-radius: 0;">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="email" layoutX="82.0" layoutY="220.0" focusColor="#224132" prefHeight="25.0" prefWidth="346.0" promptText="Почта" style="-fx-background-radius: 0;">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXTextField>
+      <JFXPasswordField fx:id="password" layoutX="82.0" layoutY="260.0" focusColor="#224132" prefHeight="25.0" prefWidth="346.0" promptText="Пароль" style="-fx-background-radius: 0;">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXPasswordField>
+      <JFXPasswordField fx:id="confirmPassword" layoutX="82.0" layoutY="300.0" focusColor="#224132" prefHeight="25.0" prefWidth="346.0" promptText="Подтвердить пароль" style="-fx-background-radius: 0;">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXPasswordField>
+      <Label fx:id="word" layoutX="170.0" layoutY="51.0" text="Регистрация" textFill="WHITE">
+         <font>
+            <Font size="27.0" />
+         </font>
+      </Label>
+      <JFXButton layoutX="260.0" layoutY="350.0" onAction="#createAccount" prefHeight="25.0" prefWidth="168.0" style="-fx-border-color: #FFFFFF;" text="Сохранить" textFill="WHITE">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXButton>
+      <JFXButton layoutX="82.0" layoutY="350.0" onAction="#caancel" prefHeight="25.0" prefWidth="168.0" style="-fx-border-color: #FFFFFF;" text="Назад" textFill="WHITE">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXButton>
+   </children>
+   <Pane fx:id="ColoPane" prefHeight="450.0" prefWidth="300.0" style="-fx-background-color: linear-gradient(to right, rgb(255,255,255) , #c08edc); -fx-background-radius: 20 0 0 20;" AnchorPane.rightAnchor="0.0">
+   </Pane>
+</AnchorPane>

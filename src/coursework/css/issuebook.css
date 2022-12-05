@@ -1,0 +1,14 @@
+.jfx-button:hover{
+    -fx-background-color: rgb(192, 142, 220);
+    -fx-text-fill: white;
+}
+
+.jfx-button{
+    -fx-background-color: rgb(145, 84, 220);
+    -fx-text-fill: white;
+    -fx-background-radius: 0;
+}
+
+.jfx-button:focused{
+    -fx-background-color: rgb(192, 142, 220);
+}

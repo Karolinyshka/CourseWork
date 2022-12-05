@@ -1,0 +1,4 @@
+/build/
+/dist/
+# Project exclude paths
+/out/
