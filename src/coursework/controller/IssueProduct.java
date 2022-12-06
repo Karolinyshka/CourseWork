@@ -2,16 +2,25 @@ package coursework.controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import coursework.model.IssuedBook;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
+import javafx.scene.Node;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import coursework.model.DatabaseConnection;
 import coursework.model.Notification;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -27,7 +36,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class issueProduct implements Initializable {
+public class IssueProduct implements Initializable {
 
 
     @FXML
@@ -47,22 +56,57 @@ public class issueProduct implements Initializable {
     @FXML
     private Text studentEmail;
     @FXML
+    private TableView<IssuedBook> shortTermBooksTable;
+    @FXML
+    private TableColumn<IssuedBook, String> sStudentName;
+    @FXML
+    private TableColumn<IssuedBook, String> sBookName;
+    @FXML
+    private TableColumn<IssuedBook, String> sIssuedTime;
+    @FXML
     private Text contact;
     String boName = "";
     String stuName = "";
     @FXML
     private JFXButton issueBook;
 
+    ObservableList<IssuedBook> list2 = FXCollections.observableArrayList();
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
+        initializeColumns();
+        getData("SELECT * FROM ShortTermBook", list2, "IssuedTime",  shortTermBooksTable);
     }
 
+    private void initializeColumns() {
 
+        sStudentName.setCellValueFactory(new PropertyValueFactory<>("studentName"));
+        sBookName.setCellValueFactory(new PropertyValueFactory<>("bookName"));
+        sIssuedTime.setCellValueFactory(new PropertyValueFactory<>("issuedTime"));
+
+    }
+    private void getData(String query, ObservableList<IssuedBook> list,  String field2, TableView tableView) {
+        PreparedStatement pre = null;
+        Connection conn = null;
+        ResultSet rs = null;
+        list.clear();
+        try {
+            conn = DatabaseConnection.Connect();
+            pre = conn.prepareStatement(query);
+            rs = pre.executeQuery();
+            while (rs.next()) {
+                list.add(new IssuedBook(rs.getString("StudentID"), rs.getString("StudentName"), rs.getString("BookName"), rs.getString(field2)));
+            }
+            tableView.getItems().setAll(list);
+        } catch (SQLException ex) {
+            Logger.getLogger(IssueProduct.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     private void clearFieldsAndLabels() {
         bookSearchField.clear();
         studentSearchTextField.clear();
-        bookName.setText("Book Title");
+        bookName.setText("Название");
         bookAuthor.setText("Book Author");
         bookPublisher.setText("Book Publisher");
         availability.setText("Availability");
@@ -147,7 +191,7 @@ public class issueProduct implements Initializable {
                         }
                     } else {
                         bookSearchField.clear();
-                        bookName.setText("Book Title");
+                        bookName.setText("Название");
                         bookAuthor.setText("Book Author");
                         bookPublisher.setText("Book Publisher");
                         availability.setText("Availability");
@@ -258,115 +302,6 @@ public class issueProduct implements Initializable {
                 if (resultSet.next()) {
                     switch (resultSet.getString("Section")) {
                         case "К выдаче": {
-                            preparedStatement1.setString(1, studentSearchTextField.getText());
-                            resultSet1 = preparedStatement1.executeQuery();
-                            int borrowedTimes = resultSet1.getInt(1);
-                            if (borrowedTimes == 0 || borrowedTimes <= 2) {
-                                LocalDate issuedDate = LocalDate.now();
-                                int count;
-                                String query1 = "INSERT INTO IssueBook (BookID,BookName,StudentID,StudentName,IssuedDate,ReturnDate,Days) VALUES (?,?,?,?,?,?,?)";
-                                String query2 = "UPDATE Book SET Availability = 'Not Available' WHERE BookID = ? COLLATE NOCASE";
-                                String query3 = "SELECT RemainingBooks FROM Book WHERE BookID = ? COLLATE NOCASE";
-                                String query4 = "UPDATE Book SET RemainingBooks = ? WHERE BookID = ? COLLATE NOCASE";
-                                try {
-                                    if (checkLateFee()) {
-                                        LocalDate afterFourteenDays = LocalDate.now().plusDays(14);
-                                        pre1 = connection.prepareStatement(query1);
-                                        pre2 = connection.prepareStatement(query2);
-                                        pre3 = connection.prepareStatement(query3);
-                                        pre1.setString(1, bookSearchField.getText().trim());
-                                        pre1.setString(2, boName);
-                                        pre1.setString(3, studentSearchTextField.getText().trim());
-                                        pre1.setString(4, stuName);
-                                        pre1.setString(5, issuedDate.toString());
-                                        pre1.setString(6, afterFourteenDays.toString());
-                                        pre1.setInt(7, 14);
-                                        pre2.setString(1, bookSearchField.getText().trim());
-                                        pre3.setString(1, bookSearchField.getText().trim());
-                                        rs = pre3.executeQuery();
-                                        count = rs.getInt("RemainingBooks");
-                                        if (checkIfStudentOwnsBook("SELECT * FROM IssueBook WHERE BookID = ? AND StudentID = ? COLLATE NOCASE") && checkIfStudentOwnsBook("SELECT * FROM ShortTermBook WHERE BookID = ? AND StudentID = ? COLLATE NOCASE")) {
-                                            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                                            alert.setTitle("Confirmation");
-                                            alert.setContentText("Are you sure you want to issue " + bookName.getText() + " to " + studentName.getText() + " ?");
-                                            alert.setHeaderText(null);
-                                            Optional<ButtonType> option = alert.showAndWait();
-                                            if (option.get() == ButtonType.OK) {
-                                                count--;
-                                                pre1.executeUpdate();
-                                                pre4 = connection.prepareStatement(query4);
-                                                pre4.setInt(1, count);
-                                                pre4.setString(2, bookSearchField.getText());
-                                                pre4.executeUpdate();
-                                                if (count == 0) {
-                                                    pre2.executeUpdate();
-                                                }
-                                                Notification notification = new Notification("Message", "Book issue successfully completed", 3);
-                                                bookSearchField.clear();
-                                                studentSearchTextField.clear();
-                                                bookName.setText("Book Title");
-                                                bookAuthor.setText("Book Author");
-                                                bookPublisher.setText("Book Publisher");
-                                                availability.setText("Availability");
-                                                studentName.setText("Student Name");
-                                                studentEmail.setText("Email Address");
-                                                contact.setText("Contact");
-                                                stuName = "";
-                                                boName = "";
-                                                bookSearchField.requestFocus();
-                                            }
-                                        }
-                                    }
-                                } catch (SQLException exception) {
-                                    System.err.println(exception);
-                                } finally {
-                                    try {
-                                        if (pre1 != null) {
-                                            pre1.close();
-                                        }
-                                        if (pre2 != null) {
-                                            pre2.close();
-                                        }
-                                        if (pre3 != null) {
-                                            pre3.close();
-                                        }
-                                        if (pre4 != null) {
-                                            pre4.close();
-                                        }
-                                        if (rs != null) {
-                                            rs.close();
-                                        }
-                                    } catch (SQLException e1) {
-                                        System.err.println(e1);
-                                    } finally {
-                                        try {
-                                            if (pre1 != null) {
-                                                pre1.close();
-                                            }
-                                            if (pre2 != null) {
-                                                pre2.close();
-                                            }
-                                            if (pre3 != null) {
-                                                pre3.close();
-                                            }
-                                            if (pre4 != null) {
-                                                pre4.close();
-                                            }
-                                            if (rs != null) {
-                                                rs.close();
-                                            }
-                                        } catch (SQLException e1) {
-                                            System.err.println(e1);
-                                        }
-                                    }
-                                }
-                            } else {
-                                coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "Information", "Maximum number of borrowed books reached");
-                                clearFieldsAndLabels();
-                            }
-                            break;
-                        }
-                        case "Short Loan Book": {
                             preparedStatement2.setString(1, studentSearchTextField.getText());
                             resultSet2 = preparedStatement2.executeQuery();
                             int borrowedTimes = resultSet2.getInt(1);
@@ -414,7 +349,7 @@ public class issueProduct implements Initializable {
                                                 Notification notification = new Notification("Message", "Book issue successfully completed", 3);
                                                 bookSearchField.clear();
                                                 studentSearchTextField.clear();
-                                                bookName.setText("Book Title");
+                                                bookName.setText("Название");
                                                 bookAuthor.setText("Book Author");
                                                 bookPublisher.setText("Book Publisher");
                                                 availability.setText("Availability");
@@ -429,26 +364,6 @@ public class issueProduct implements Initializable {
                                     }
                                 } catch (SQLException e) {
                                     System.err.println(e);
-                                } finally {
-                                    try {
-                                        if (pre1 != null) {
-                                            pre1.close();
-                                        }
-                                        if (pre2 != null) {
-                                            pre2.close();
-                                        }
-                                        if (pre3 != null) {
-                                            pre3.close();
-                                        }
-                                        if (pre4 != null) {
-                                            pre4.close();
-                                        }
-                                        if (rs != null) {
-                                            rs.close();
-                                        }
-                                    } catch (SQLException e1) {
-                                        System.err.println(e1);
-                                    }
                                 }
                             } else {
                                 coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "Information", "Maximum number of borrowed books reached");
@@ -459,33 +374,7 @@ public class issueProduct implements Initializable {
                     }
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(issueProduct.class.getName()).log(Level.SEVERE, null, ex);
-            } finally {
-                try {
-                    if (resultSet != null) {
-                        resultSet.close();
-                    }
-                    if (resultSet1 != null) {
-                        resultSet1.close();
-                    }
-                    if (resultSet2 != null) {
-                        resultSet2.close();
-                    }
-                    if (preparedStatement != null){
-                        preparedStatement.close();
-                    }
-                    if (preparedStatement1 != null){
-                        preparedStatement1.close();
-                    }
-                    if (preparedStatement2 != null){
-                        preparedStatement2.close();
-                    }
-                    if (connection != null){
-                        connection.close();
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger(issueProduct.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                Logger.getLogger(IssueProduct.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -513,10 +402,25 @@ public class issueProduct implements Initializable {
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(issueProduct.class
+            Logger.getLogger(IssueProduct.class
                     .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(IssueProduct.class
+                        .getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return true;
     }
 }
-

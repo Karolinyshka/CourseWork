@@ -383,7 +383,7 @@ public class UserController implements Initializable {
 
     @FXML
     private void loadDetailsToUpdate(ActionEvent event) {
-        Librarian librarian = (Librarian) librarianTable.getSelectionModel().getSelectedItem();
+                Librarian librarian = (Librarian) librarianTable.getSelectionModel().getSelectedItem();
         if (librarian == null) {
             Notification notification = new Notification("Information", "Select librarian record to update", 3);
         } else {

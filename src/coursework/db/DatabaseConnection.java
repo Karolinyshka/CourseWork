@@ -5,7 +5,7 @@ import org.sqlite.SQLiteConfig;
 
 public class DatabaseConnection {
 
-    public static Connection Connect() {
+    public static Connection connect() {
         try {
             Class.forName("org.sqlite.JDBC");
             SQLiteConfig configuration = new SQLiteConfig();

@@ -25,7 +25,7 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import javafx.scene.control.ComboBox?>
-<BorderPane fx:id="boarderpane" prefHeight="651.0" prefWidth="1000.0" style="-fx-background-color: white;" stylesheets="@../css/allBooks.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="coursework.controller.ProductController">
+<BorderPane fx:id="boarderpane" prefHeight="651.0" prefWidth="1000.0" style="-fx-background-color: white;" stylesheets="@../css/Product.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="coursework.controller.ProductController">
     <top>
         <VBox prefHeight="123.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
             <children>

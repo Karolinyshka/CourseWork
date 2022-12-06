@@ -26,7 +26,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import static coursework.controller.mainController.checkLateFee;
+import static coursework.controller.MainController.checkLateFee;
 import coursework.model.LoadStage;
 import coursework.model.MailServer;
 import coursework.model.Notification;
@@ -36,7 +36,7 @@ import coursework.model.Notification;
  *
  * @author Bright
  */
-public class adminPanelController implements Initializable {
+public class AdminPanelController implements Initializable {
 
     @FXML
     private BorderPane borderpane;
@@ -90,7 +90,7 @@ public class adminPanelController implements Initializable {
             BorderPane borderPane = (BorderPane) FXMLLoader.load(getClass().getResource("/coursework/view/dashBoard.fxml"));
             borderpane.setCenter(borderPane);
         } catch (IOException ex) {
-            Logger.getLogger(adminPanelController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AdminPanelController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

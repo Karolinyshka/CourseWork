@@ -32,7 +32,7 @@ import coursework.model.Notification;
 
 // удалено request
 
-public class createAccountController implements Initializable {
+public class CreateAccountController implements Initializable {
 
     @FXML
     private Label close;

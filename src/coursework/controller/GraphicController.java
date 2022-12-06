@@ -9,6 +9,7 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
 import jfxtras.scene.control.gauge.linear.SimpleMetroArcGauge;
@@ -72,6 +73,7 @@ public class GraphicController implements Initializable {
         thread.start();
     }
 
+
     private void loadBookDetailsGraph() {
         String selectAllBooks = "SELECT SUM(Quantity) FROM Book";
         String remainingBooks = "SELECT SUM(RemainingBooks) FROM Book";
@@ -114,7 +116,7 @@ public class GraphicController implements Initializable {
                 Tooltip.install(data.getNode(), new Tooltip(data.getXValue().toString() + " : " + data.getYValue().toString().replace(".0", "")));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(dashBoardController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DashBoardController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -143,7 +145,7 @@ public class GraphicController implements Initializable {
                 Tooltip.install(data.getNode(), new Tooltip(data.getXValue().toString() + " : " + data.getYValue().toString().replace(".0", "")));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(dashBoardController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DashBoardController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Text?>
 <?import jfxtras.scene.control.gauge.linear.SimpleMetroArcGauge?>
 
-<BorderPane fx:id="graphBoarderpane" prefHeight="651.0" prefWidth="1000.0" style="-fx-background-color: white;" stylesheets="@../css/dashBoard.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="coursework.controller.dashBoardController">
+<BorderPane fx:id="graphBoarderpane" prefHeight="651.0" prefWidth="1000.0" style="-fx-background-color: white;" stylesheets="@../css/dashBoard.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="coursework.controller.DashBoardController">
    <top>
       <VBox prefHeight="69.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
          <children>

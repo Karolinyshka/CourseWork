@@ -1,7 +1,7 @@
 package coursework.db;
 
 import javafx.scene.input.InputMethodTextRun;
-import coursework.controller.loginController;
+import coursework.controller.LoginController;
 import coursework.model.Alert;
 
 
@@ -9,7 +9,7 @@ import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class DBWorker implements databaseInterface {
+public class DBWorker implements DatabaseInterface {
     private InputMethodTextRun usernameTextField;
     private InputMethodTextRun passwordTextField;
     private static DBWorker db = null;
@@ -37,7 +37,7 @@ public class DBWorker implements databaseInterface {
         ResultSet resultSet = null;
         String selectQuery = "SELECT COUNT(*) FROM User";
         try {
-            connection = DatabaseConnection.Connect();
+            connection = DatabaseConnection.connect();
             preparedStatement = connection.prepareStatement(selectQuery);
             resultSet = preparedStatement.executeQuery();
             int numberOfRows = resultSet.getInt(1);
@@ -46,7 +46,7 @@ public class DBWorker implements databaseInterface {
                 return false;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(loginController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return true;
     }
@@ -58,7 +58,7 @@ public class DBWorker implements databaseInterface {
         String query = "SELECT * FROM User WHERE Username = ? AND Password = ?";
         if (validateFields() && checkIfAccountExist()) {
             try {
-                conn = DatabaseConnection.Connect();
+                conn = DatabaseConnection.connect();
                 pre = conn.prepareStatement(query);
                 pre.setString(1, usernameTextField.getText().trim());
                 pre.setString(2, passwordTextField.getText().trim());

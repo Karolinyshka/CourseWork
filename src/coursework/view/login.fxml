@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 <?import javafx.geometry.Insets?>
-<AnchorPane id="AnchorPane" fx:id="parentroot" prefHeight="450.0" prefWidth="800.0" styleClass="mainFxmlClass" stylesheets="@../css/login.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="coursework.controller.loginController">
+<AnchorPane id="AnchorPane" fx:id="parentroot" prefHeight="450.0" prefWidth="800.0" styleClass="mainFxmlClass" stylesheets="@../css/login.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="coursework.controller.LoginController">
    <Pane fx:id="ColorPane" prefHeight="450.0" prefWidth="800.0" style="-fx-background-color: linear-gradient(to right, #bc9ce8 , #c3a3ea); ">
       <effect>
          <DropShadow blurType="GAUSSIAN" color="#363636" height="27.99" offsetX="8.0" radius="20.4925" width="55.98" />

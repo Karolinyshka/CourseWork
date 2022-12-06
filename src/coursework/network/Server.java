@@ -136,7 +136,7 @@ public class Server implements Runnable {
                         ResultSet resultSet = null;
                         String selectQuery = "SELECT COUNT(*) FROM User";
                         try {
-                            connection = DatabaseConnection.Connect();
+                            connection = DatabaseConnection.connect();
                             preparedStatement = connection.prepareStatement(selectQuery);
                             resultSet = preparedStatement.executeQuery();
                             int numberOfRows = resultSet.getInt(1);

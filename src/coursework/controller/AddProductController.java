@@ -4,7 +4,6 @@ import com.jfoenix.controls.JFXButton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -13,7 +12,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import coursework.model.Book;
 import coursework.model.DatabaseConnection;
@@ -77,42 +75,39 @@ public class AddProductController implements Initializable {
     }
 
     private void requestFocus(TextField field) {
-        field.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.DOWN) {
-                    if (field.getUserData().equals("id")) {
-                        bookname.requestFocus();
-                    }
-                    if (field.getUserData().equals("name")) {
-                        bookAuthor.requestFocus();
-                    }
-                    if (field.getUserData().equals("author")) {
-                        bookPublusher.requestFocus();
-                    }
-                    if (field.getUserData().equals("publisher")) {
-                        edition.requestFocus();
-                    }
-                    if (field.getUserData().equals("edition")) {
-                        quantity.requestFocus();
-                    }
+        field.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.DOWN) {
+                if (field.getUserData().equals("id")) {
+                    bookname.requestFocus();
                 }
-                if (event.getCode() == KeyCode.UP) {
-                    if (field.getUserData().equals("qnty")) {
-                        edition.requestFocus();
-                    }
-                    if (field.getUserData().equals("edition")) {
-                        bookPublusher.requestFocus();
-                    }
-                    if (field.getUserData().equals("publisher")) {
-                        bookAuthor.requestFocus();
-                    }
-                    if (field.getUserData().equals("author")) {
-                        bookname.requestFocus();
-                    }
-                    if (field.getUserData().equals("name")) {
-                        bookId.requestFocus();
-                    }
+                if (field.getUserData().equals("name")) {
+                    bookAuthor.requestFocus();
+                }
+                if (field.getUserData().equals("author")) {
+                    bookPublusher.requestFocus();
+                }
+                if (field.getUserData().equals("publisher")) {
+                    edition.requestFocus();
+                }
+                if (field.getUserData().equals("edition")) {
+                    quantity.requestFocus();
+                }
+            }
+            if (event.getCode() == KeyCode.UP) {
+                if (field.getUserData().equals("qnty")) {
+                    edition.requestFocus();
+                }
+                if (field.getUserData().equals("edition")) {
+                    bookPublusher.requestFocus();
+                }
+                if (field.getUserData().equals("publisher")) {
+                    bookAuthor.requestFocus();
+                }
+                if (field.getUserData().equals("author")) {
+                    bookname.requestFocus();
+                }
+                if (field.getUserData().equals("name")) {
+                    bookId.requestFocus();
                 }
             }
         });
@@ -447,7 +442,7 @@ public class AddProductController implements Initializable {
     private void back(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/coursework/view/Product.fxml"));
         BorderPane borderPane = loader.load();
-        mainController.pane.setCenter(borderPane);
+        MainController.pane.setCenter(borderPane);
         AddProductController.isinEditMode = false;
     }
 }

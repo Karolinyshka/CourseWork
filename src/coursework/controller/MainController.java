@@ -30,7 +30,7 @@ import coursework.model.DatabaseConnection;
 import coursework.model.LoadStage;
 import coursework.model.Notification;
 
-public class mainController implements Initializable {
+public class MainController implements Initializable {
 
     @FXML
     private BorderPane borderpane;
@@ -84,7 +84,7 @@ public class mainController implements Initializable {
             BorderPane borderPane = (BorderPane) FXMLLoader.load(getClass().getResource("/coursework/view/NewProduct.fxml"));
             borderpane.setCenter(borderPane);
         } catch (IOException ex) {
-            Logger.getLogger(mainController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -135,7 +135,7 @@ public class mainController implements Initializable {
 
             }
         } catch (SQLException ex) {
-            Logger.getLogger(mainController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 if (resultSet != null) {
@@ -151,7 +151,7 @@ public class mainController implements Initializable {
                     connection.close();
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(mainController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -171,7 +171,7 @@ public class mainController implements Initializable {
     @FXML
     private void loadPro(ActionEvent event) throws IOException {
         AddProductController.isinEditMode = false;
-        BorderPane borderPane = (BorderPane) FXMLLoader.load(getClass().getResource("/coursework/view/NewProduct.fxml"));
+        BorderPane borderPane = (BorderPane) FXMLLoader.load(getClass().getResource("/coursework/view/ExportData.fxml"));
         borderpane.setCenter(borderPane);
     }
 
@@ -199,7 +199,7 @@ public class mainController implements Initializable {
     }
     @FXML
     private void loadSettingsPanel(ActionEvent event) throws IOException {
-        BorderPane borderPane = (BorderPane) FXMLLoader.load(getClass().getResource("/coursework/view/Settings.fxml"));
+        BorderPane borderPane = (BorderPane) FXMLLoader.load(getClass().getResource("/coursework/view/Password.fxml"));
         borderpane.setCenter(borderPane);
     }
 

@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderpane" onMouseDragged="#stageDragged" onMousePressed="#stagePressed" prefHeight="651.0" prefWidth="1141.0" style="-fx-border-color: #ffffff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="coursework.controller.mainController">
+<BorderPane fx:id="borderpane" onMouseDragged="#stageDragged" onMousePressed="#stagePressed" prefHeight="651.0" prefWidth="1141.0" style="-fx-border-color: #ffffff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="coursework.controller.MainController">
    <left>
       <VBox fx:id="homeButtonsPanel" maxWidth="250.0" minWidth="250.0" prefHeight="250.0" prefWidth="500.0" stylesheets="@../css/main.css" BorderPane.alignment="CENTER">
          <children>
@@ -79,7 +79,7 @@
                   <FontAwesomeIconView fill="WHITE" glyphName="LIST" size="22" />
                </graphic>
             </JFXButton>
-            <JFXButton fx:id="announcement" alignment="TOP_LEFT" layoutX="11.0" layoutY="363.0" onAction="#loadPro" prefHeight="40.0" prefWidth="300.0" text="Запись" textAlignment="JUSTIFY" textFill="WHITE">
+            <JFXButton fx:id="announcement" alignment="TOP_LEFT" layoutX="11.0" layoutY="363.0" onAction="#loadPro" prefHeight="40.0" prefWidth="300.0"  text="Запись" textAlignment="JUSTIFY" textFill="WHITE">
                <font>
                   <Font name="Arial Bold" size="16.0" />
                </font>

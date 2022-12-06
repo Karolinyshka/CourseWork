@@ -15,6 +15,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import com.jfoenix.controls.JFXTextField?>
 <BorderPane fx:id="graphBoarderpane" prefHeight="651.0" prefWidth="1000.0" style="-fx-background-color: white;" stylesheets="@../css/dashBoard.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="coursework.controller.GraphicController">
     <top>
         <VBox prefHeight="69.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
@@ -39,8 +40,9 @@
             </children>
         </VBox>
     </top>
+
     <center>
-        <VBox prefHeight="401.0" prefWidth="500.0" BorderPane.alignment="CENTER">
+        <VBox prefHeight="350.0" prefWidth="800.0" BorderPane.alignment="CENTER">
             <children>
                 <BarChart fx:id="barchart" title="" VBox.vgrow="ALWAYS">
                     <xAxis>
@@ -64,5 +66,4 @@
             </children>
         </VBox>
     </center>
-
 </BorderPane>

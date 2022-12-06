@@ -33,7 +33,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class loginController implements Initializable {
+public class LoginController implements Initializable {
 
     @FXML
     private Label userLogin;
@@ -178,7 +178,7 @@ public class loginController implements Initializable {
                 return false;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(loginController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return true;
     }
@@ -209,7 +209,7 @@ public class loginController implements Initializable {
                     }
                 }
             } catch (InterruptedException ex) {
-                Logger.getLogger(loginController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

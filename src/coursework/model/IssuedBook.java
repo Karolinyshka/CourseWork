@@ -18,24 +18,22 @@ public class IssuedBook {
     private SimpleIntegerProperty days;
     private SimpleDoubleProperty fee;
 
-    public IssuedBook(int issuedID, String bookID, String bookName, String studentID, String studentName, String issuedTime, String returnDate, int days, double fee) {
+    public IssuedBook(int issuedID, String bookID, String bookName, String studentID, String studentName, String issuedTime,  int days, double fee) {
         this.issuedID = new SimpleIntegerProperty(issuedID);
         this.bookID = new SimpleStringProperty(bookID);
         this.bookName = new SimpleStringProperty(bookName);
         this.studentID = new SimpleStringProperty(studentID);
         this.studentName = new SimpleStringProperty(studentName);
         this.issuedTime = new SimpleStringProperty(issuedTime);
-        this.returnDate = new SimpleStringProperty(returnDate);
         this.days = new SimpleIntegerProperty(days);
         this.fee = new SimpleDoubleProperty(fee);
     }
 
-    public IssuedBook(String studentID, String studenName, String bookName, String issuedDayorTime, String returnDateOrTime) {
+    public IssuedBook(String studentID, String studenName, String bookName, String issuedDayorTime) {
         this.studentID = new SimpleStringProperty(studentID);
         this.studentName = new SimpleStringProperty(studenName);
         this.bookName = new SimpleStringProperty(bookName);
         this.issuedTime = new SimpleStringProperty(issuedDayorTime);
-        this.returnDate = new SimpleStringProperty(returnDateOrTime);
     }
 
     public int getIssuedID() {

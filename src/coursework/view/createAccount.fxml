@@ -10,7 +10,7 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import javafx.scene.layout.Pane?>
-<AnchorPane id="AnchorPane" prefHeight="450.0" prefWidth="800.0" style="-fx-background-color: #c3a3ea;" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="coursework.controller.createAccountController">
+<AnchorPane id="AnchorPane" prefHeight="450.0" prefWidth="800.0" style="-fx-background-color: #c3a3ea;" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="coursework.controller.CreateAccountController">
    <children>
 
       <JFXTextField fx:id="name" layoutX="82.0" layoutY="100.0" focusColor="#224132" prefHeight="25.0" prefWidth="346.0" promptText="Имя" style="-fx-background-radius: 0;">

@@ -59,13 +59,13 @@ public class Password implements Initializable {
                 conn = DatabaseConnection.Connect();
                 pre1 = conn.prepareStatement(query1);
                 pre2 = conn.prepareStatement(query2);
-                pre1.setInt(1, loginController.userID);
+                pre1.setInt(1, LoginController.userID);
                 pre1.setString(2, currentPassword.getText());
                 rs = pre1.executeQuery();
                 if (rs.next()) {
                     if (newPassword.getText().equals(newpassword2.getText())) {
                         pre2.setString(1, newpassword2.getText());
-                        pre2.setString(2, String.valueOf(loginController.userID));
+                        pre2.setString(2, String.valueOf(LoginController.userID));
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                         alert.setTitle("Confirmation");
                         alert.setHeaderText(null);

@@ -39,7 +39,7 @@ import coursework.model.DatabaseConnection;
  *
  * @author Bright
  */
-public class dashBoardController implements Initializable {
+public class DashBoardController implements Initializable {
 
     @FXML
     private Label minimise;
@@ -182,7 +182,7 @@ public class dashBoardController implements Initializable {
                 Tooltip.install(data.getNode(), new Tooltip(data.getXValue().toString() + " : " + data.getYValue().toString().replace(".0", "")));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(dashBoardController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DashBoardController.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 if (rs1 != null) {
@@ -213,7 +213,7 @@ public class dashBoardController implements Initializable {
                     connection.close();
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(dashBoardController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DashBoardController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -255,7 +255,7 @@ public class dashBoardController implements Initializable {
                 Tooltip.install(data.getNode(), new Tooltip(data.getXValue().toString() + " : " + data.getYValue().toString().replace(".0", "")));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(dashBoardController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DashBoardController.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 if (rs1 != null) {
@@ -280,7 +280,7 @@ public class dashBoardController implements Initializable {
                     connection.close();
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(dashBoardController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DashBoardController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
