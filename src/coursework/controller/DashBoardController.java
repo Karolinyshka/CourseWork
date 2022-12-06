@@ -34,11 +34,6 @@ import javafx.stage.Stage;
 import jfxtras.scene.control.gauge.linear.SimpleMetroArcGauge;
 import coursework.model.DatabaseConnection;
 
-/**
- * FXML Controller class
- *
- * @author Bright
- */
 public class DashBoardController implements Initializable {
 
     @FXML

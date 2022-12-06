@@ -87,7 +87,7 @@ public class AdminPanelController implements Initializable {
         thread.setDaemon(true);
         thread.start();
         try {
-            BorderPane borderPane = (BorderPane) FXMLLoader.load(getClass().getResource("/coursework/view/dashBoard.fxml"));
+            BorderPane borderPane = (BorderPane) FXMLLoader.load(getClass().getResource("/coursework/view/Graphic.fxml"));
             borderpane.setCenter(borderPane);
         } catch (IOException ex) {
             Logger.getLogger(AdminPanelController.class.getName()).log(Level.SEVERE, null, ex);
@@ -102,7 +102,7 @@ public class AdminPanelController implements Initializable {
 
     @FXML
     private void loadHomePanel(ActionEvent event) throws IOException {
-        BorderPane borderPane = (BorderPane) FXMLLoader.load(getClass().getResource("/coursework/view/dashBoard.fxml"));
+        BorderPane borderPane = (BorderPane) FXMLLoader.load(getClass().getResource("/coursework/view/Graphic.fxml"));
         borderpane.setCenter(borderPane);
         UserController.isEditableMode = false;
     }

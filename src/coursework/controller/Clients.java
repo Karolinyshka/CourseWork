@@ -138,7 +138,7 @@ public class Clients implements Initializable {
 
     private boolean validateFields() {
         if (studentID.getText().isEmpty() || studentName.getText().isEmpty() || studentEmail.getText().isEmpty() || studentPhone.getText().isEmpty()) {
-            coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Field validation", "Please enter in all fields!");
+            coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "", "Заполните все поля");
             return false;
         } else {
             return true;
@@ -151,7 +151,7 @@ public class Clients implements Initializable {
         if (M.find() && M.group().equals(studentID.getText())) {
             return true;
         } else {
-            coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "ID validation", "Please enter a valid student id!");
+            coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "", "Введите корректный номер пользователя");
             return false;
         }
     }
@@ -162,7 +162,7 @@ public class Clients implements Initializable {
         if (M.find() && M.group().equals(studentName.getText())) {
             return true;
         } else {
-            coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Name validation", "Please enter a valid student name!");
+            coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "", "Заполните правильно поле ФИО");
             return false;
         }
     }
@@ -186,7 +186,7 @@ public class Clients implements Initializable {
         if (m1.find() && m1.group().equals(studentPhone.getText()) || m2.find() && m2.group().equals(studentPhone.getText())) {
             return true;
         } else {
-            coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Phone number validation", "Please enter a valid phone number!");
+            coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "", "Проверьте правильность ввода номера телефона");
             return false;
         }
     }
@@ -202,7 +202,7 @@ public class Clients implements Initializable {
             pre.setString(1, studentID.getText());
             rs = pre.executeQuery();
             if (rs.next()) {
-                coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "ID validation", "Student id already exist");
+                coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "", "Клиент под таким номером уже существует");
                 return false;
             }
         } catch (SQLException e) {
@@ -331,7 +331,7 @@ public class Clients implements Initializable {
                 pre.setString(4, studentPhone.getText().trim());
                 pre.executeUpdate();
                 loadData();
-                Notification notification = new Notification("Message", "Student successfully added", 3);
+                Notification notification = new Notification("", "Клиент добавлен", 3);
                 clearFields();
                 save.setDisable(false);
             }
@@ -373,7 +373,7 @@ public class Clients implements Initializable {
                     pre.executeUpdate();
                     loadData();
                     clearFields();
-                    Notification notification = new Notification("Message", "Student information successfully updated", 3);
+                    Notification notification = new Notification("", "Редактирование клиента прошло успешно", 3);
                     studentID.setEditable(true);
                     update.setVisible(false);
                     save.setDisable(false);
@@ -396,110 +396,6 @@ public class Clients implements Initializable {
         }
     }
 
-    @FXML
-    private void deleteStudent(ActionEvent event) {
-        PreparedStatement pre = null;
-        PreparedStatement pre2 = null;
-        PreparedStatement pre21 = null;
-        PreparedStatement pre3 = null;
-        PreparedStatement pre4 = null;
-        PreparedStatement insert = null;
-        Connection conn = null;
-        ResultSet rs2 = null;
-        ResultSet rs21 = null;
-        ResultSet rs3 = null;
-        ResultSet rs4 = null;
-        String query = "DELETE FROM Student WHERE studentID = ?";
-        String query2 = "SELECT * FROM IssueBook WHERE StudentID = ?";
-        String query21 = "SELECT * FROM ShortTermBook WHERE StudentID = ?";
-        String query3 = "SELECT Name FROM Student WHERE StudentID = ?";
-        String select = "SELECT * FROM Student WHERE StudentId = ?";
-        String insertQuery = "INSERT INTO ArhieveStudent (studentID,Name,Email,Phone) VALUES (?,?,?,?)";
-        try {
-            conn = DatabaseConnection.Connect();
-            pre2 = conn.prepareStatement(query2);
-            pre21 = conn.prepareStatement(query21);
-            pre3 = conn.prepareStatement(query3);
-            pre4 = conn.prepareStatement(select);
-            insert = conn.prepareStatement(insertQuery);
-            pre2.setString(1, studentID.getText());
-            pre21.setString(1, studentID.getText());
-            pre3.setString(1, studentID.getText());
-            rs2 = pre2.executeQuery();
-            rs21 = pre21.executeQuery();
-            if (rs2.next() || rs21.next()) {
-                rs3 = pre3.executeQuery();
-                String stuName = rs3.getString("Name");
-                coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "Information", stuName + " is holding a book");
-            } else {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Confirmation");
-                alert.setHeaderText(null);
-                alert.setContentText("Are you sure you want to archieve this student record ?");
-                Optional<ButtonType> choice = alert.showAndWait();
-                if (choice.get() == ButtonType.OK) {
-                    pre4.setString(1, studentID.getText());
-                    rs4 = pre4.executeQuery();
-                    while (rs4.next()) {
-                        insert.setString(1, rs4.getString(1));
-                        insert.setString(2, rs4.getString(2));
-                        insert.setString(3, rs4.getString(3));
-                        insert.setString(4, rs4.getString(4));
-                    }
-                    insert.executeUpdate();
-                    pre = conn.prepareStatement(query);
-                    pre.setString(1, studentID.getText());
-                    pre.executeUpdate();
-                    loadData();
-                    save.setDisable(false);
-                    update.setVisible(false);
-                    studentID.setEditable(true);
-                    Notification notification = new Notification("Information", "Student record successfully moved to archieved student list", 3);
-                    clearFields();
-                }
-            }
-        } catch (SQLException ex) {
-            System.err.println(ex);
-        } finally {
-            try {
-                if (rs21 != null) {
-                    rs21.close();
-                }
-                if (pre != null) {
-                    pre.close();
-                }
-                if (pre2 != null) {
-                    pre2.close();
-                }
-                if (pre21 != null) {
-                    pre21.close();
-                }
-                if (rs2 != null) {
-                    rs2.close();
-                }
-                if (pre4 != null) {
-                    pre4.close();
-                }
-                if (insert != null) {
-                    insert.close();
-                }
-                if (rs4 != null) {
-                    rs4.close();
-                }
-                if (rs3 != null) {
-                    rs3.close();
-                }
-                if (pre3 != null) {
-                    pre3.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException ex) {
-                System.err.println(ex);
-            }
-        }
-    }
 
     @FXML
     private void searchStudentDeatails(KeyEvent event) {
@@ -516,7 +412,7 @@ public class Clients implements Initializable {
                 if (student.getStudentName().toLowerCase().contains(filterLowerCase)) {
                     return true;
                 }
-                studentTable.setPlaceholder(new Text("No record match your search"));
+                studentTable.setPlaceholder(new Text("Пользователь не найден"));
                 return false;
             });
             SortedList<Student> sortedList = new SortedList<>(filteredList);
@@ -565,43 +461,6 @@ public class Clients implements Initializable {
         stuPhone.setCellValueFactory(new PropertyValueFactory<>("studentPhone"));
     }
 
-    private void loadArchievedRecord() {
-        studentData.clear();
-        Connection conn = null;
-        PreparedStatement pre = null;
-        ResultSet rs = null;
-        String query = "SELECT * FROM ArhieveStudent";
-        try {
-            conn = DatabaseConnection.Connect();
-            pre = conn.prepareStatement(query);
-            rs = pre.executeQuery();
-            while (rs.next()) {
-                studentData.add(new Student(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4)));
-            }
-            studentTable.getItems().setAll(studentData);
-        } catch (SQLException ex) {
-            System.err.println(ex);
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (pre != null) {
-                    pre.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException ex) {
-                System.err.println(ex);
-            }
-        }
-    }
-
-
-
-
-
     @FXML
     private void deleteStudentRecord(ActionEvent event) {
         String query = "DELETE FROM Student WHERE studentID = ?";
@@ -645,31 +504,9 @@ public class Clients implements Initializable {
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(Clients.class.getName()).log(Level.SEVERE, null, ex);
-            } finally {
-                try {
-                    if (rs != null) {
-                        rs.close();
-                    }
-                    if (rs1 != null) {
-                        rs1.close();
-                    }
-                    if (preparedStatement != null) {
-                        preparedStatement.close();
-                    }
-                    if (preparedStatement2 != null) {
-                        preparedStatement2.close();
-                    }
-                    if (preparedStatement3 != null) {
-                        preparedStatement3.close();
-                    }
-                    if (connection != null) {
-                        connection.close();
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger(Clients.class.getName()).log(Level.SEVERE, null, ex);
-                }
+            }
                 loadData();
             }
         }
     }
-}
+

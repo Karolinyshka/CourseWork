@@ -22,7 +22,7 @@
 
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXPasswordField?>
-<BorderPane prefHeight="651.0" prefWidth="1000.0" style="-fx-background-color: white;" stylesheets="@../css/students.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="coursework.controller.UserController">
+<BorderPane prefHeight="651.0" prefWidth="1000.0" style="-fx-background-color: white;" stylesheets="@../css/Product.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="coursework.controller.UserController">
    <top>
       <VBox prefHeight="123.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
          <children>
@@ -30,30 +30,32 @@
                <children>
                   <HBox prefHeight="81.0" prefWidth="1000.0" spacing="10.0">
                      <children>
-                        <Label prefHeight="69.0" prefWidth="200.0" style="-fx-text-fill: #224132;" text="Пользователи">
-                           <font>
-                              <Font name="Segoe UI Semilight" size="25.0" />
-                           </font>
-                           <padding>
-                              <Insets left="10.0" />
-                           </padding>
-                        </Label>
-                        <ImageView fx:id="spinner" fitHeight="41.0" fitWidth="57.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/spinner.gif" />
-                           </image>
-                           <HBox.margin>
-                              <Insets top="15.0" />
-                           </HBox.margin>
-                        </ImageView>
+                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="800.0" spacing="10.0">
+                           <children>
+                              <Label prefHeight="73.0" prefWidth="300.0" style="-fx-border-color: #c08edc; -fx-border-radius: 0; -fx-border-width: 2; -fx-background-color: #c08edc;" text="Настройки" textFill="#224132">
+                                 <font>
+                                    <Font name="Arial Bold" size="39.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets left="30.0" right="10"/>
+                                 </padding>
+                              </Label>
+                              <HBox alignment="CENTER_RIGHT" prefHeight="90.0" prefWidth="90.0" spacing="10.0">
+                                 <children>
+                                    <Label prefHeight="73.0" prefWidth="100.0" style="-fx-border-color: #c08edc; -fx-border-radius: 0; -fx-border-width: 2; -fx-background-color: #c08edc;" text="">
+                                    </Label>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </HBox>
                         <Region prefHeight="81.0" prefWidth="42.0" HBox.hgrow="NEVER" />
                         <HBox alignment="CENTER_LEFT" prefHeight="81.0" prefWidth="697.0" spacing="10.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <OctIconView fill="#224132" glyphName="SEARCH" size="26" />
-                              <TextField fx:id="searchTextField" onKeyReleased="#searchLibrarianDeatails" prefHeight="25.0" prefWidth="230.0" promptText="Найти пользователя" style="-fx-background-radius: 0;">
+                              <JFXTextField fx:id="searchTextField" onKeyReleased="#searchLibrarianDeatails" focusColor="#c08edc"
+                                            prefHeight="25.0" prefWidth="230.0" promptText="Найти пользователя" style="-fx-background-radius: 0;">
                                  <font>
                                     <Font name="Segoe UI Semilight" size="12.0" />
-                                 </font></TextField>
+                                 </font></JFXTextField>
                               <HBox alignment="CENTER_RIGHT" prefHeight="69.0" prefWidth="418.0" HBox.hgrow="ALWAYS">
                               </HBox>
                            </children>

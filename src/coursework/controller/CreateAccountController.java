@@ -41,6 +41,10 @@ public class CreateAccountController implements Initializable {
     @FXML
     private TextField username;
     @FXML
+    private TextField name;
+    @FXML
+    private TextField surname;
+    @FXML
     private TextField email;
     @FXML
     private PasswordField password;
@@ -51,8 +55,8 @@ public class CreateAccountController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        password.setTooltip(new Tooltip("The password must be at least 8 characters long"));
-        confirmPassword.setTooltip(new Tooltip("The password must be at least 8 characters long"));
+        password.setTooltip(new Tooltip("Пароль должен содержать не менее 8 символов"));
+        confirmPassword.setTooltip(new Tooltip("Пароль должен содержать не менее 8 символов"));
     }
 
     @FXML
@@ -73,14 +77,14 @@ public class CreateAccountController implements Initializable {
         if (M.find() && M.group().equals(email.getText())) {
             return true;
         } else {
-            Alert alert = new Alert(AlertType.ERROR, "Email validation", "Please enter a valid email address");
+            Alert alert = new Alert(AlertType.ERROR, "", "Проверьте корректность ввода поля Почта");
             return false;
         }
     }
 
     private boolean validateFields() {
         if (username.getText().isEmpty() || email.getText().isEmpty() || password.getText().isEmpty() || confirmPassword.getText().isEmpty()) {
-            Alert alert = new Alert(AlertType.INFORMATION, "Fields validation", "Please enter in all fields!");
+            Alert alert = new Alert(AlertType.INFORMATION, "", "Заполните все поля");
             return false;
         }
         return true;
@@ -118,21 +122,23 @@ public class CreateAccountController implements Initializable {
     private void createAccount(ActionEvent event) throws IOException {
         Connection conn = null;
         PreparedStatement pre = null;
-        String query1 = "INSERT INTO User (Username,Email,Password,Usertype) VALUES (?,?,?,?)";
+        String query1 = "INSERT INTO User (Firstname,Lastame,Username,Email,Password,Usertype) VALUES (?,?,?,?,?,?)";
         if (validateFields() && validateEmail() && validatePasswordLength() && checkIfAccountAlreadyExist()) {
             try {
                 conn = DatabaseConnection.Connect();
                 pre = conn.prepareStatement(query1);
                 if (password.getText().equals(confirmPassword.getText())) {
-                    pre.setString(1, username.getText().trim());
-                    pre.setString(2, email.getText().trim());
-                    pre.setString(3, password.getText());
-                    pre.setString(4, "Librarian");
+                    pre.setString(1, name.getText().trim());
+                    pre.setString(2, surname.getText().trim());
+                    pre.setString(3, username.getText().trim());
+                    pre.setString(4, email.getText().trim());
+                    pre.setString(5, password.getText());
+                    pre.setString(6, "Librarian");
                     pre.executeUpdate();
-                    Notification notification = new Notification("Information", "Account successfully created", 3);
+                    Notification notification = new Notification("", "Аккаунт создан", 3);
                     LoadStage stage = new LoadStage("/coursework/view/login.fxml", close);
                 } else {
-                    Alert alert = new Alert(AlertType.INFORMATION, "Information", "Passwords do not match");
+                    Alert alert = new Alert(AlertType.INFORMATION, "", "Пароль не совпадает");
                     password.clear();
                     confirmPassword.clear();
                 }
@@ -190,7 +196,7 @@ public class CreateAccountController implements Initializable {
 
     private boolean validatePasswordLength() {
         if (password.getText().length() < 8 || confirmPassword.getText().length() < 8) {
-            Alert alert = new Alert(AlertType.ERROR, "Password length validation", "The password must be at least 8 characters long");
+            Alert alert = new Alert(AlertType.ERROR, "", "Пароль должен содержать не менее 8 символов");
             return false;
         }
         return true;

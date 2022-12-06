@@ -46,8 +46,6 @@ public class UserController implements Initializable {
 
 
     @FXML
-    private ImageView spinner;
-    @FXML
     private TextField searchTextField;
     @FXML
     private JFXButton cancel;
@@ -108,7 +106,6 @@ public class UserController implements Initializable {
         task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
             @Override
             public void handle(WorkerStateEvent event) {
-                spinner.setVisible(false);
                 loadData();
             }
         });
@@ -177,27 +174,7 @@ public class UserController implements Initializable {
         stage.setIconified(true);
     }
 
-    @FXML
-    private void fullscreen(MouseEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        if (!stage.isFullScreen()) {
-            stage.setFullScreen(true);
-        }
-    }
 
-    @FXML
-    private void unfullscreen(MouseEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        if (stage.isFullScreen()) {
-            stage.setFullScreen(false);
-        }
-    }
-
-    @FXML
-    private void close(MouseEvent event) {
-        Platform.exit();
-        System.exit(0);
-    }
 
     @FXML
     private void cancel(ActionEvent event) {
