@@ -11,32 +11,11 @@
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="651.0" prefWidth="1000.0" style="-fx-background-color: white;" stylesheets="@../css/settings.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="coursework.controller.adminSettingsController">
+<BorderPane prefHeight="651.0" prefWidth="1000.0" style="-fx-background-color: white;" stylesheets="@../css/settings.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="coursework.controller.AdminSettings">
    <top>
       <VBox prefHeight="123.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
          <children>
-            <BorderPane prefHeight="67.0" prefWidth="957.0">
-               <right>
-                  <HBox alignment="TOP_RIGHT" prefHeight="37.0" prefWidth="127.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
-                     <children>
-                        <Label fx:id="minimise" contentDisplay="GRAPHIC_ONLY" onMouseClicked="#minimize" />
-                        <Label fx:id="fullscreen" contentDisplay="GRAPHIC_ONLY" layoutX="182.0" layoutY="10.0" onMouseClicked="#fullscreen" />
-                        <Label fx:id="unfullscreen" contentDisplay="GRAPHIC_ONLY" layoutX="182.0" layoutY="10.0" onMouseClicked="#unfullscreen" />
-                        <Label fx:id="close" contentDisplay="GRAPHIC_ONLY" layoutX="182.0" layoutY="10.0" onMouseClicked="#close" />
-                     </children>
-                  </HBox>
-               </right>
-               <center>
-                  <Label text="Library Management System" textFill="#a1a1a1" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font name="Segoe UI Semilight" size="23.0" />
-                     </font>
-                     <BorderPane.margin>
-                        <Insets top="2.0" />
-                     </BorderPane.margin>
-                  </Label>
-               </center>
-            </BorderPane>
+
             <VBox prefHeight="117.0" prefWidth="953.0" style="-fx-background-color: white;">
                <children>
                   <HBox prefHeight="81.0" prefWidth="957.0" spacing="10.0" style="-fx-background-color: white;">
@@ -70,7 +49,7 @@
                         <Insets left="12.0" top="15.0" />
                      </VBox.margin>
                   </Label>
-                  <JFXButton fx:id="adminInfor" onAction="#loadAdmininfo" prefHeight="44.0" prefWidth="302.0" text="Your information">
+                  <JFXButton fx:id="adminInfo" onAction="#loadAdmininfo" prefHeight="44.0" prefWidth="302.0" text="Your information">
                      <VBox.margin>
                         <Insets left="1.0" right="1.0" top="20.0" />
                      </VBox.margin>
@@ -94,62 +73,6 @@
                      <padding>
                         <Insets left="-13.0" />
                      </padding>
-                  </JFXButton>
-                  <JFXButton fx:id="feeButton" layoutX="11.0" layoutY="118.0" onAction="#loadChangeFeePanel" prefHeight="44.0" prefWidth="302.0" text="Change late fee per day">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                     <graphic>
-                        <FontAwesomeIconView glyphName="CREDIT_CARD" size="20" />
-                     </graphic>
-                     <padding>
-                        <Insets left="40.0" />
-                     </padding>
-                     <VBox.margin>
-                        <Insets left="1.0" right="1.0" top="2.0" />
-                     </VBox.margin>
-                  </JFXButton>
-                  <JFXButton fx:id="feeButton2" layoutX="11.0" layoutY="164.0" onAction="#loadChangeHourFeePanel" prefHeight="44.0" prefWidth="302.0" text="Change late fee per hour">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                     <graphic>
-                        <FontAwesomeIconView glyphName="CREDIT_CARD" size="20" />
-                     </graphic>
-                     <padding>
-                        <Insets left="50.0" />
-                     </padding>
-                     <VBox.margin>
-                        <Insets left="1.0" right="1.0" top="2.0" />
-                     </VBox.margin>
-                  </JFXButton>
-                  <JFXButton fx:id="feeButton1" layoutX="11.0" layoutY="164.0" onAction="#loadMailServerSettingsPanel" prefHeight="44.0" prefWidth="302.0" text="Mail Server">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                     <padding>
-                        <Insets right="37.0" />
-                     </padding>
-                     <graphic>
-                        <OctIconView glyphName="MAIL" size="25" />
-                     </graphic>
-                     <VBox.margin>
-                        <Insets left="1.0" right="1.0" top="2.0" />
-                     </VBox.margin>
-                  </JFXButton>
-                  <JFXButton fx:id="feeButton11" layoutX="10.0" layoutY="208.0" onAction="#backupDatabase" prefHeight="44.0" prefWidth="302.0" text="Backup Database">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                     <padding>
-                        <Insets right="4.0" />
-                     </padding>
-                     <graphic>
-                        <OctIconView glyphName="DATABASE" size="25" />
-                     </graphic>
-                     <VBox.margin>
-                        <Insets left="1.0" right="1.0" top="2.0" />
-                     </VBox.margin>
                   </JFXButton>
                </children>
             </VBox>

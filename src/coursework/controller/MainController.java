@@ -164,13 +164,13 @@ public class MainController implements Initializable {
     }
     @FXML
     private void loadStudentPanel(ActionEvent event) throws IOException {
-        AddProductController.isinEditMode = false;
+
         BorderPane borderPane = (BorderPane) FXMLLoader.load(getClass().getResource("/coursework/view/Clients.fxml"));
         borderpane.setCenter(borderPane);
     }
     @FXML
     private void loadPro(ActionEvent event) throws IOException {
-        AddProductController.isinEditMode = false;
+
         BorderPane borderPane = (BorderPane) FXMLLoader.load(getClass().getResource("/coursework/view/ExportData.fxml"));
         borderpane.setCenter(borderPane);
     }
@@ -188,7 +188,6 @@ public class MainController implements Initializable {
     }
     @FXML
     private void loadIssueBooksPanel(ActionEvent event) throws IOException {
-        AddProductController.isinEditMode = false;
         BorderPane borderPane = (BorderPane) FXMLLoader.load(getClass().getResource("/coursework/view/issueProduct.fxml"));
         borderpane.setCenter(borderPane);
     }
