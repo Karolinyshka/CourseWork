@@ -4,13 +4,11 @@ package coursework.controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -18,7 +16,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -103,12 +100,7 @@ public class UserController implements Initializable {
             }
         };
 
-        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-                loadData();
-            }
-        });
+        task.setOnSucceeded(event -> loadData());
         Thread thread = new Thread(task);
         thread.setDaemon(true);
         thread.start();
@@ -217,7 +209,7 @@ public class UserController implements Initializable {
         if (M.find() && M.group().equals(field.getText())) {
             return true;
         } else {
-            coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Name validation", field.getUserData() + " is invalid");
+          coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Name validation", field.getUserData() + " is invalid");
             return false;
         }
     }
@@ -228,19 +220,20 @@ public class UserController implements Initializable {
         if (M.find() && M.group().equals(emailAddress.getText())) {
             return true;
         } else {
-            coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Email validation", "Please enter a valid email address!");
+          coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Email validation", "Please enter a valid email address!");
             return false;
         }
     }
 
     private boolean validateFields() {
         if (firstName.getText().isEmpty() || lastName.getText().isEmpty() || userName.getText().isEmpty() || emailAddress.getText().isEmpty() || password1.getText().isEmpty() || password2.getText().isEmpty()) {
-            coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Fields validation", "Please enter in all fields!");
+          coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Fields validation", "Please enter in all fields!");
             return false;
         }
         return true;
     }
 
+    //TODO: edit
     @FXML
     private void saveLibrarian(ActionEvent event) {
         Connection connection = null;
@@ -250,7 +243,7 @@ public class UserController implements Initializable {
         if (validateFields() && validateName(firstName) && validateName(lastName) && validateName(userName) && validateEmail() && validatePasswordLength()) {
             try {
                 if (isEditableMode) {
-                    connection = DatabaseConnection.Connect();
+                    connection = DatabaseConnection.connect();
                     preparedStatement = connection.prepareStatement(update);
                     if (validatePasswords(password1, password2)) {
                         preparedStatement.setString(1, firstName.getText());
@@ -274,7 +267,7 @@ public class UserController implements Initializable {
                         }
                     }
                 } else {
-                    connection = DatabaseConnection.Connect();
+                    connection = DatabaseConnection.connect();
                     preparedStatement = connection.prepareStatement(query);
                     if (checkIfUsernameExists(userName.getText()) && validatePasswords(password1, password2)) {
                         preparedStatement.setString(1, firstName.getText());
@@ -323,7 +316,7 @@ public class UserController implements Initializable {
         ResultSet resultSet = null;
         String query = "SELECT * FROM User WHERE Usertype = ?";
         try {
-            connection = DatabaseConnection.Connect();
+            connection = DatabaseConnection.connect();
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, "Librarian");
             resultSet = preparedStatement.executeQuery();
@@ -385,7 +378,7 @@ public class UserController implements Initializable {
             Notification notification = new Notification("Information", "Select librarian record to delete", 3);
         } else {
             try {
-                connection = DatabaseConnection.Connect();
+                connection = DatabaseConnection.connect();
                 preparedStatement = connection.prepareStatement("DELETE FROM User WHERE ID = ?");
                 preparedStatement.setInt(1, librarian.getId());
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -433,12 +426,12 @@ public class UserController implements Initializable {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            connection = DatabaseConnection.Connect();
+            connection = DatabaseConnection.connect();
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, username);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "Username Validation", "Another Librarian is using this username");
+              coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "Username Validation", "Another Librarian is using this username");
                 return false;
             }
         } catch (SQLException ex) {
@@ -465,7 +458,7 @@ public class UserController implements Initializable {
         if (password1.getText().equals(password2.getText())) {
             return true;
         }
-        coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Information", "Passwords don't match.");
+      coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Information", "Passwords don't match.");
         password1.clear();
         password2.clear();
         password1.requestFocus();
@@ -474,7 +467,7 @@ public class UserController implements Initializable {
 
     private boolean validatePasswordLength() {
         if (password1.getText().length() < 8 || password2.getText().length() < 8) {
-            coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Password length validation", "The password must be at least 8 characters long");
+          coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Password length validation", "The password must be at least 8 characters long");
             return false;
         }
         return true;

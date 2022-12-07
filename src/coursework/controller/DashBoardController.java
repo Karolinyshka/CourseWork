@@ -152,7 +152,7 @@ public class DashBoardController implements Initializable {
         ResultSet rs3 = null;
         ResultSet rs4 = null;
         try {
-            connection = DatabaseConnection.Connect();
+            connection = DatabaseConnection.connect();
             ps1 = connection.prepareStatement(selectAllBooks);
             ps2 = connection.prepareStatement(remainingBooks);
             ps3 = connection.prepareStatement(allIssuedBooks);
@@ -225,7 +225,7 @@ public class DashBoardController implements Initializable {
         ResultSet rs2 = null;
         ResultSet rs3 = null;
         try {
-            connection = DatabaseConnection.Connect();
+            connection = DatabaseConnection.connect();
             ps1 = connection.prepareStatement(selectAllStudents);
             ps2 = connection.prepareStatement(allStudentsHoldingBooks);
             ps3 = connection.prepareStatement(allStudentsHoldingShortTermBooks);
@@ -298,7 +298,7 @@ public class DashBoardController implements Initializable {
         String query4 = "SELECT StudentID FROM IssueBook";
         String query5 = "SELECT StudentID FROM ShortTermBook";
         try {
-            conn = DatabaseConnection.Connect();
+            conn = DatabaseConnection.connect();
             pre1 = conn.prepareStatement(query1);
             rs1 = pre1.executeQuery();
             int allBooks = rs1.getInt(1);

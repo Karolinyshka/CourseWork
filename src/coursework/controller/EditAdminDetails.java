@@ -3,6 +3,7 @@ package coursework.controller;
 import com.jfoenix.controls.JFXButton;
 import coursework.model.DatabaseConnection;
 import coursework.model.Notification;
+import coursework.utils.DBUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -52,7 +53,7 @@ public class EditAdminDetails implements Initializable {
 
     private boolean validateFields() {
         if (username.getText().isEmpty() || email.getText().isEmpty() || password.getText().isEmpty()) {
-            coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "", "Заполните все поля");
+          coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "", "Заполните все поля");
             return false;
         }
         return true;
@@ -64,17 +65,17 @@ public class EditAdminDetails implements Initializable {
         if (m.find() && m.group().equals(email.getText())) {
             return true;
         }
-        coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Email Validation", "Email is invalid");
+      coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Email Validation", "Email is invalid");
         return false;
     }
-
+    //TODO: edit
     private void fetchUserName() {
         Connection conn = null;
         PreparedStatement pre = null;
         ResultSet rs = null;
         String query = "SELECT Username FROM User";
         try {
-            conn = DatabaseConnection.Connect();
+            conn = DatabaseConnection.connect();
             pre = conn.prepareStatement(query);
             rs = pre.executeQuery();
             user.setText(rs.getString(1));
@@ -96,7 +97,7 @@ public class EditAdminDetails implements Initializable {
             }
         }
     }
-
+    //TODO: edit
     @FXML
     private void updateAdminInfo(ActionEvent event) {
         Connection conn = null;
@@ -107,7 +108,7 @@ public class EditAdminDetails implements Initializable {
         String query2 = "SELECT * FROM User WHERE Usertype = ? AND Password = ?";
         if (validateFields() && validateEmail()) {
             try {
-                conn = DatabaseConnection.Connect();
+                conn = DatabaseConnection.connect();
                 pre1 = conn.prepareStatement(query1);
                 pre2 = conn.prepareStatement(query2);
                 pre2.setString(1, "Administrator");
@@ -129,7 +130,7 @@ public class EditAdminDetails implements Initializable {
                         password.clear();
                     }
                 } else {
-                   coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "", "Ошибка в пароле");
+                 coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "", "Ошибка в пароле");
                     password.clear();
                 }
             } catch (SQLException ex) {
@@ -162,14 +163,15 @@ public class EditAdminDetails implements Initializable {
         email.clear();
         loadAdminInformation();
     }
-
+    //TODO: edit
     private void loadAdminInformation() {
+//        DBUtils.loadAdminInfo(user);
         String query = "SELECT * FROM User WHERE Usertype = ?";
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            connection = DatabaseConnection.Connect();
+            connection = DatabaseConnection.connect();
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, "Administrator");
             resultSet = preparedStatement.executeQuery();

@@ -1,7 +1,6 @@
 package coursework.controller;
 
 import com.jfoenix.controls.JFXButton;
-import coursework.model.Student;
 import de.jensd.fx.glyphs.octicons.OctIconView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -172,7 +171,7 @@ public class NewProductController implements Initializable {
         if (m.find() && m.group().equals(bookName.getText())) {
             return true;
         } else {
-            coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Book name validation", "Please enter a valid book name!");
+          coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Book name validation", "Please enter a valid book name!");
             return false;
         }
     }
@@ -182,7 +181,7 @@ public class NewProductController implements Initializable {
         if (m.find() && m.group().equals(edition.getText())) {
             return true;
         } else {
-            coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Book edition validation", "Please enter a valid book edition!");
+          coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Book edition validation", "Please enter a valid book edition!");
             return false;
         }
     }
@@ -192,7 +191,7 @@ public class NewProductController implements Initializable {
         Connection conn = null;
         String query = "UPDATE Book SET Name = ?,Author = ?,Publisher = ?,Edition = ?,Quantity = ?,RemainingBooks = ?,Availability = ?,Section = ? WHERE BookID = ?";
         try {
-            conn = DatabaseConnection.Connect();
+            conn = DatabaseConnection.connect();
              {
                 pre = conn.prepareStatement(query);
                 pre.setString(1, Name.getText().trim());
@@ -231,7 +230,7 @@ public class NewProductController implements Initializable {
         Connection conn = null;
         String query = "INSERT INTO Book (BookID,Name,Author,Publisher,Edition,Quantity,RemainingBooks,Availability,Section) VALUES (?,?,?,?,?,?,?,?,?)";
         try {
-            conn = DatabaseConnection.Connect();
+            conn = DatabaseConnection.connect();
             pre = conn.prepareStatement(query);
             if (checkIFIDExist()) {
                 pre.setString(1, BookID.getText().trim());
@@ -262,7 +261,7 @@ public class NewProductController implements Initializable {
                 Notification notification = new Notification("Information", "Select librarian record to delete", 3);
             } else {
                 try {
-                    connection = DatabaseConnection.Connect();
+                    connection = DatabaseConnection.connect();
                     preparedStatement = connection.prepareStatement("DELETE FROM Book WHERE BookID = ?");
                     preparedStatement.setString(1, librarian.getBookID());
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -353,7 +352,7 @@ public class NewProductController implements Initializable {
         String select = "SELECT * FROM Book WHERE BookId = ?";
         String insertQuery = "INSERT INTO Arhieve (BookID,Name,Author,Publisher,Edition,Quantity,RemainingBooks,Availability,Section) VALUES (?,?,?,?,?,?,?,?,?)";
         try {
-            conn = DatabaseConnection.Connect();
+            conn = DatabaseConnection.connect();
             pre2 = conn.prepareStatement(query2);
             pre3 = conn.prepareStatement(query3);
             pre4 = conn.prepareStatement(select);
@@ -364,7 +363,7 @@ public class NewProductController implements Initializable {
             if (rs2.next() ) {
                 rs3 = pre3.executeQuery();
                 String stuName = rs3.getString("Name");
-                coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "Information", stuName + " is holding a book");
+              coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "Information", stuName + " is holding a book");
             } else {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Confirmation");
@@ -410,7 +409,7 @@ public class NewProductController implements Initializable {
         ResultSet rs = null;
         String query = "SELECT * FROM Arhieve";
         try {
-            conn = DatabaseConnection.Connect();
+            conn = DatabaseConnection.connect();
             pre = conn.prepareStatement(query);
             rs = pre.executeQuery();
             while (rs.next()) {
@@ -434,7 +433,7 @@ public class NewProductController implements Initializable {
         }
         if (student != null) {
             try {
-                connection = DatabaseConnection.Connect();
+                connection = DatabaseConnection.connect();
                 preparedStatement = connection.prepareStatement(insert);
                 preparedStatement1 = connection.prepareStatement(deleteQuery);
                 preparedStatement.setString(1, student.getBookID());
@@ -472,7 +471,7 @@ public class NewProductController implements Initializable {
         ResultSet rs = null;
         String query = "SELECT * FROM Book order by BookID";
         try {
-            conn = DatabaseConnection.Connect();
+            conn = DatabaseConnection.connect();
             pre = conn.prepareStatement(query);
             rs = pre.executeQuery();
             while (rs.next()) {
@@ -490,12 +489,12 @@ public class NewProductController implements Initializable {
         ResultSet rs = null;
         String query = "SELECT * FROM Book WHERE BookID = ?";
         try {
-            conn = DatabaseConnection.Connect();
+            conn = DatabaseConnection.connect();
             pre = conn.prepareStatement(query);
             pre.setString(1, BookID.getText());
             rs = pre.executeQuery();
             if (rs.next()) {
-                coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "ID validation", "Student id already exist");
+              coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "ID validation", "Student id already exist");
                 return false;
             }
         } catch (SQLException e) {
@@ -566,7 +565,7 @@ public class NewProductController implements Initializable {
                     update.setVisible(true);
                     delete.setVisible(true);
                     save.setDisable(true);
-                    conn = DatabaseConnection.Connect();
+                    conn = DatabaseConnection.connect();
                     pre = conn.prepareStatement(query);
                     pre.setString(1, stu.getBookID());
                     rs = pre.executeQuery();

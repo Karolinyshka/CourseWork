@@ -119,7 +119,7 @@ public class MainController implements Initializable {
         PreparedStatement preparedStatement1 = null;
         ResultSet resultSet = null;
         try {
-            connection = DatabaseConnection.Connect();
+            connection = DatabaseConnection.connect();
             preparedStatement = connection.prepareStatement(query);
             preparedStatement1 = connection.prepareStatement(insertQuery);
             resultSet = preparedStatement.executeQuery();
@@ -188,7 +188,7 @@ public class MainController implements Initializable {
     }
     @FXML
     private void loadIssueBooksPanel(ActionEvent event) throws IOException {
-        BorderPane borderPane = (BorderPane) FXMLLoader.load(getClass().getResource("/coursework/view/issueProduct.fxml"));
+        BorderPane borderPane = (BorderPane) FXMLLoader.load(getClass().getResource("/coursework/view/issueproduct.fxml"));
         borderpane.setCenter(borderPane);
     }
     @FXML

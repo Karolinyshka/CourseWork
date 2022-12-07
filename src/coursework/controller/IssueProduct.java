@@ -2,32 +2,29 @@ package coursework.controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import coursework.model.DatabaseConnection;
 import coursework.model.IssuedBook;
-import javafx.application.Platform;
+import coursework.model.Notification;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.fxml.FXML.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
-import coursework.model.DatabaseConnection;
-import coursework.model.Notification;
-import javafx.stage.Stage;
 
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -92,7 +89,7 @@ public class IssueProduct implements Initializable {
         ResultSet rs = null;
         list.clear();
         try {
-            conn = DatabaseConnection.Connect();
+            conn = DatabaseConnection.connect();
             pre = conn.prepareStatement(query);
             rs = pre.executeQuery();
             while (rs.next()) {
@@ -122,13 +119,13 @@ public class IssueProduct implements Initializable {
         Connection conn = null;
         ResultSet rs = null;
         try {
-            conn = DatabaseConnection.Connect();
+            conn = DatabaseConnection.connect();
             pre = conn.prepareStatement(query);
             pre.setString(1, bookSearchField.getText());
             pre.setString(2, studentSearchTextField.getText());
             rs = pre.executeQuery();
             if (rs.next()) {
-                coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "Information", studentName.getText() + " is already hoding this book");
+              coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "Information", studentName.getText() + " is already hoding this book");
                 clearFieldsAndLabels();
                 bookSearchField.requestFocus();
                 return false;
@@ -162,9 +159,9 @@ public class IssueProduct implements Initializable {
             ResultSet rs = null;
             String query = "SELECT * FROM Book WHERE BookID = ? ";
             try {
-                conn = DatabaseConnection.Connect();
+                conn = DatabaseConnection.connect();
                 if (bookSearchField.getText().isEmpty()) {
-                    coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "Field validation", "The field is empty");
+                  coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "Field validation", "The field is empty");
                 } else {
                     pre = conn.prepareStatement(query);
                     pre.setString(1, bookSearchField.getText().trim());
@@ -227,9 +224,9 @@ public class IssueProduct implements Initializable {
         String query = "SELECT * FROM Student WHERE StudentID = ? COLLATE NOCASE";
         if (event.getCode() == KeyCode.ENTER) {
             try {
-                conn = DatabaseConnection.Connect();
+                conn = DatabaseConnection.connect();
                 if (studentSearchTextField.getText().isEmpty()) {
-                    coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "Field validation", "The field is empty");
+                  coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "Field validation", "The field is empty");
                 } else {
                     pre = conn.prepareStatement(query);
                     pre.setString(1, studentSearchTextField.getText().trim());
@@ -290,10 +287,10 @@ public class IssueProduct implements Initializable {
         String selectLongTermBorrowedTime = "SELECT COUNT(StudentID) FROM IssueBook WHERE StudentID = ?";
         String selectShortTermBorrowedTime = "SELECT COUNT(StudentID) FROM ShortTermBook WHERE StudentID = ?";
         if (bookSearchField.getText().isEmpty() || studentSearchTextField.getText().isEmpty() || studentName.getText().equals("Student Name") || bookName.getText().equals("Book Name")) {
-            coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "Information", "Please enter in all fields");
+          coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "Information", "Please enter in all fields");
         } else {
             try {
-                connection = DatabaseConnection.Connect();
+                connection = DatabaseConnection.connect();
                 preparedStatement = connection.prepareStatement(query);
                 preparedStatement1 = connection.prepareStatement(selectLongTermBorrowedTime);
                 preparedStatement2 = connection.prepareStatement(selectShortTermBorrowedTime);
@@ -366,7 +363,7 @@ public class IssueProduct implements Initializable {
                                     System.err.println(e);
                                 }
                             } else {
-                                coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "Information", "Maximum number of borrowed books reached");
+                              coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "Information", "Maximum number of borrowed books reached");
                                 clearFieldsAndLabels();
                             }
                             break;
@@ -390,13 +387,13 @@ public class IssueProduct implements Initializable {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            connection = DatabaseConnection.Connect();
+            connection = DatabaseConnection.connect();
             preparedStatement = connection.prepareStatement(query);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 double lateFeePerDay = resultSet.getDouble(2);
                 if (lateFeePerDay == 0.0) {
-                    coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "Information", "Late fee not set");
+                  coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "Information", "Late fee not set");
                     return false;
 
                 }

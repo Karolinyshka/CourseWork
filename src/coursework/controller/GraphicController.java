@@ -9,7 +9,6 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
 import jfxtras.scene.control.gauge.linear.SimpleMetroArcGauge;
@@ -89,7 +88,7 @@ public class GraphicController implements Initializable {
         ResultSet rs3 = null;
         ResultSet rs4 = null;
         try {
-            connection = DatabaseConnection.Connect();
+            connection = DatabaseConnection.connect();
             ps1 = connection.prepareStatement(selectAllBooks);
             ps2 = connection.prepareStatement(remainingBooks);
             ps3 = connection.prepareStatement(allIssuedBooks);
@@ -130,7 +129,7 @@ public class GraphicController implements Initializable {
         ResultSet rs2 = null;
         ResultSet rs3 = null;
         try {
-            connection = DatabaseConnection.Connect();
+            connection = DatabaseConnection.connect();
             ps1 = connection.prepareStatement(selectAllStudents);
 
             rs1 = ps1.executeQuery();
@@ -149,102 +148,5 @@ public class GraphicController implements Initializable {
         }
     }
 
-    /*private void allBooksAndRemainingBooks() {
-        Connection conn = null;
-        PreparedStatement pre1 = null;
-        PreparedStatement pre2 = null;
-        PreparedStatement pre3 = null;
-        PreparedStatement pre4 = null;
-        PreparedStatement pre5 = null;
-        ResultSet rs1 = null;
-        ResultSet rs2 = null;
-        ResultSet rs3 = null;
-        ResultSet rs4 = null;
-        ResultSet rs5 = null;
-        String query1 = "SELECT SUM(Quantity) FROM Book";
-        String query2 = "SELECT SUM(RemainingBooks) FROM Book";
-        String query3 = "SELECT COUNT(*) FROM Student";
-        String query4 = "SELECT StudentID FROM IssueBook";
-        String query5 = "SELECT StudentID FROM ShortTermBook";
-        try {
-            conn = DatabaseConnection.Connect();
-            pre1 = conn.prepareStatement(query1);
-            rs1 = pre1.executeQuery();
-            int allBooks = rs1.getInt(1);
-            pre2 = conn.prepareStatement(query2);
-            rs2 = pre2.executeQuery();
-            int rBooks = rs2.getInt(1);
-            pre3 = conn.prepareStatement(query3);
-            rs3 = pre3.executeQuery();
-            int allStudents = rs3.getInt(1);
-            pre4 = conn.prepareStatement(query4);
-            rs4 = pre4.executeQuery();
-            pre5 = conn.prepareStatement(query5);
-            rs5 = pre5.executeQuery();
-            Set<String> set = new HashSet<>();
-            while (rs4.next()) {
-                set.add(rs4.getString("StudentID"));
-            }
-            while (rs5.next()) {
-                set.add(rs5.getString("StudentID"));
-            }
-            if (allStudents == 0) {
-            } else {
-                allStudentsGauge.setMaxValue(allStudents);
-                allStudentsGauge.setValue(allStudents);
-                bookHoldersGauge.setMaxValue(allStudents);
-                bookHoldersGauge.setValue(set.size());
-            }
-            int issuedBooks = allBooks - rBooks;
-            if (allBooks == 0) {
-            } else {
-                allBooksGauge.setMaxValue(allBooks);
-                allBooksGauge.setValue(allBooks);
-                remainingBooksGauge.setMaxValue(allBooks);
-                remainingBooksGauge.setValue(rBooks);
-                issuedBooksGauge.setMaxValue(allBooks);
-                issuedBooksGauge.setValue(issuedBooks);
-            }
-        } catch (SQLException ex) {
-            System.err.println(ex);
-        } finally {
-            try {
-                if (rs1 != null) {
-                    rs1.close();
-                }
-                if (rs2 != null) {
-                    rs2.close();
-                }
-                if (rs3 != null) {
-                    rs3.close();
-                }
-                if (rs4 != null) {
-                    rs4.close();
-                }
-                if (rs5 != null) {
-                    rs5.close();
-                }
-                if (pre1 != null) {
-                    pre1.close();
-                }
-                if (pre2 != null) {
-                    pre2.close();
-                }
-                if (pre3 != null) {
-                    pre3.close();
-                }
-                if (pre4 != null) {
-                    pre4.close();
-                }
-                if (pre5 != null) {
-                    pre5.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException ex) {
-                System.err.println(ex);
-            }
-        }
-    }*/
+
 }

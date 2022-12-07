@@ -9,9 +9,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -19,19 +16,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class exportDataController implements Initializable {
 
-    @FXML
-    private Label minimise;
-    @FXML
-    private Label fullscreen;
-    @FXML
-    private Label unfullscreen;
-    @FXML
-    private Label close;
     @FXML
     private BorderPane borderPane;
     @FXML
@@ -45,7 +32,7 @@ public class exportDataController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         try {
-            BorderPane borderpane = (BorderPane) FXMLLoader.load(getClass().getResource("/coursework/view/exportToPdf.fxml"));
+            BorderPane borderpane = FXMLLoader.load(getClass().getResource("/coursework/view/exportToPdf.fxml"));
             borderPane.setCenter(borderpane);
         } catch (IOException ex) {
 
@@ -92,11 +79,4 @@ public class exportDataController implements Initializable {
     }
 
 
-    private boolean isTypeSelected() {
-        if (reportType.getValue() == null) {
-            return false;
-        }
-        type = reportType.getValue();
-        return true;
-    }
 }

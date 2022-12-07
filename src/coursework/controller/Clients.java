@@ -1,43 +1,25 @@
 package coursework.controller;
 
 import com.jfoenix.controls.JFXButton;
-import coursework.model.Book;
-import javafx.application.Platform;
+import coursework.model.DatabaseConnection;
+import coursework.model.Notification;
+import coursework.model.Student;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import coursework.model.DatabaseConnection;
-import coursework.model.Notification;
-import coursework.model.Student;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -151,7 +133,7 @@ public class Clients implements Initializable {
         if (M.find() && M.group().equals(studentID.getText())) {
             return true;
         } else {
-            coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "", "Введите корректный номер пользователя");
+          coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "", "Введите корректный номер пользователя");
             return false;
         }
     }
@@ -162,7 +144,7 @@ public class Clients implements Initializable {
         if (M.find() && M.group().equals(studentName.getText())) {
             return true;
         } else {
-            coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "", "Заполните правильно поле ФИО");
+          coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "", "Заполните правильно поле ФИО");
             return false;
         }
     }
@@ -173,7 +155,7 @@ public class Clients implements Initializable {
         if (M.find() && M.group().equals(studentEmail.getText())) {
             return true;
         } else {
-            coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Email validation", "Please enter a valid email address!");
+          coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Email validation", "Please enter a valid email address!");
             return false;
         }
     }
@@ -186,7 +168,7 @@ public class Clients implements Initializable {
         if (m1.find() && m1.group().equals(studentPhone.getText()) || m2.find() && m2.group().equals(studentPhone.getText())) {
             return true;
         } else {
-            coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "", "Проверьте правильность ввода номера телефона");
+          coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "", "Проверьте правильность ввода номера телефона");
             return false;
         }
     }
@@ -197,12 +179,12 @@ public class Clients implements Initializable {
         ResultSet rs = null;
         String query = "SELECT * FROM Student WHERE studentID = ?";
         try {
-            conn = DatabaseConnection.Connect();
+            conn = DatabaseConnection.connect();
             pre = conn.prepareStatement(query);
             pre.setString(1, studentID.getText());
             rs = pre.executeQuery();
             if (rs.next()) {
-                coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "", "Клиент под таким номером уже существует");
+              coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "", "Клиент под таким номером уже существует");
                 return false;
             }
         } catch (SQLException e) {
@@ -243,7 +225,7 @@ public class Clients implements Initializable {
                     update.setVisible(true);
 
                     save.setDisable(true);
-                    conn = DatabaseConnection.Connect();
+                    conn = DatabaseConnection.connect();
                     pre = conn.prepareStatement(query);
                     pre.setString(1, stu.getStudentID());
                     rs = pre.executeQuery();
@@ -322,7 +304,7 @@ public class Clients implements Initializable {
         Connection conn = null;
         String query = "INSERT INTO Student (studentID,Name,Email,Phone) VALUES (?,?,?,?)";
         try {
-            conn = DatabaseConnection.Connect();
+            conn = DatabaseConnection.connect();
             pre = conn.prepareStatement(query);
             if (validateFields() && validateID() && checkIFIDExist() && validateName() && validateEmail() && validatePhoneNumber()) {
                 pre.setString(1, studentID.getText().trim());
@@ -357,7 +339,7 @@ public class Clients implements Initializable {
         Connection conn = null;
         String query = "UPDATE Student SET Name = ?,Email = ?,Phone = ? WHERE studentID = ?";
         try {
-            conn = DatabaseConnection.Connect();
+            conn = DatabaseConnection.connect();
             if (validateFields() && validateName() && validateEmail() && validatePhoneNumber()) {
                 pre = conn.prepareStatement(query);
                 pre.setString(1, studentName.getText().trim());
@@ -428,7 +410,7 @@ public class Clients implements Initializable {
         ResultSet rs = null;
         String query = "SELECT * FROM Student order by studentID";
         try {
-            conn = DatabaseConnection.Connect();
+            conn = DatabaseConnection.connect();
             pre = conn.prepareStatement(query);
             rs = pre.executeQuery();
             while (rs.next()) {
@@ -477,7 +459,7 @@ public class Clients implements Initializable {
             Notification notification = new Notification("Information", "No record selected", 3);
         } else {
             try {
-                connection = DatabaseConnection.Connect();
+                connection = DatabaseConnection.connect();
                 preparedStatement = connection.prepareStatement(query);
                 preparedStatement2 = connection.prepareStatement(query2);
                 preparedStatement3 = connection.prepareStatement(query21);
@@ -487,7 +469,7 @@ public class Clients implements Initializable {
                 rs = preparedStatement2.executeQuery();
                 rs1 = preparedStatement3.executeQuery();
                 if (rs.next() || rs1.next()) {
-                    coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "Information", student.getStudentName() + " is holding a book");
+                  coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "Information", student.getStudentName() + " is holding a book");
                 } else {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("Delete record");

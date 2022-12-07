@@ -12,6 +12,10 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import coursework.model.LoadStage;
+import coursework.model.MailServer;
+import coursework.model.Notification;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -26,10 +30,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import static coursework.controller.MainController.checkLateFee;
-import coursework.model.LoadStage;
-import coursework.model.MailServer;
-import coursework.model.Notification;
 
 /**
  * FXML Controller class
@@ -61,6 +61,7 @@ public class AdminPanelController implements Initializable {
     /**
      * Initializes the controller class.
      */
+    //TODO:???
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         back.setTooltip(new Tooltip("Logout"));
@@ -68,12 +69,7 @@ public class AdminPanelController implements Initializable {
             @Override
             protected Void call() throws Exception {
                 Thread.sleep(4000);
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        checkLateFee("Set late fee in settings panel");
-                    }
-                });
+                Platform.runLater(() -> MainController.checkLateFee("Set late fee in settings panel"));
                 Thread.sleep(2000);
                 if (MailServer.getMailServerInformation() == null) {
                     Platform.runLater(() -> {

@@ -2,17 +2,15 @@ package coursework.controller;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import coursework.model.*;
+import coursework.utils.DBUtils;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -21,14 +19,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import coursework.model.Alert;
-import coursework.model.DatabaseConnection;
-import coursework.model.LoadStage;
-import coursework.model.Notification;
 
 // удалено request
 
@@ -90,109 +83,37 @@ public class CreateAccountController implements Initializable {
         return true;
     }
 
-    private boolean checkIfAccountAlreadyExist() {
-        Connection conn = null;
-        PreparedStatement pre = null;
-        ResultSet rs = null;
-        String query2 = "SELECT * FROM User";
-        try {
-            conn = DatabaseConnection.Connect();
-            pre = conn.prepareStatement(query2);
-        } catch (SQLException ex) {
-            System.err.println(ex);
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (pre != null) {
-                    pre.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException ex) {
-                System.err.println(ex);
-            }
-        }
-        return true;
-    }
 
     @FXML
     private void createAccount(ActionEvent event) throws IOException {
-        Connection conn = null;
-        PreparedStatement pre = null;
-        String query1 = "INSERT INTO User (Firstname,Lastame,Username,Email,Password,Usertype) VALUES (?,?,?,?,?,?)";
-        if (validateFields() && validateEmail() && validatePasswordLength() && checkIfAccountAlreadyExist()) {
-            try {
-                conn = DatabaseConnection.Connect();
-                pre = conn.prepareStatement(query1);
-                if (password.getText().equals(confirmPassword.getText())) {
-                    pre.setString(1, name.getText().trim());
-                    pre.setString(2, surname.getText().trim());
-                    pre.setString(3, username.getText().trim());
-                    pre.setString(4, email.getText().trim());
-                    pre.setString(5, password.getText());
-                    pre.setString(6, "Librarian");
-                    pre.executeUpdate();
-                    Notification notification = new Notification("", "Аккаунт создан", 3);
-                    LoadStage stage = new LoadStage("/coursework/view/login.fxml", close);
-                } else {
-                    Alert alert = new Alert(AlertType.INFORMATION, "", "Пароль не совпадает");
-                    password.clear();
-                    confirmPassword.clear();
-                }
-            } catch (SQLException ex) {
-                System.err.println(ex);
-            } finally {
-                try {
-                    if (pre != null) {
-                        pre.close();
-                    }
-                    if (conn != null) {
-                        conn.close();
-                    }
-                } catch (SQLException ex) {
-                    System.err.println(ex);
-                }
+        boolean checkUserOnExist = DBUtils.checkIfUserAccountIsExist(username.getText());
+
+        if (validateFields() && validateEmail() && validatePasswordLength() && !checkUserOnExist) {
+            User user = new User(name.getText(), surname.getText(), username.getText(), email.getText(), password.getText(), "Librarian");
+
+            if (password.getText().equals(confirmPassword.getText())) {
+                DBUtils.register(user);
+
+                Notification notification = new Notification("", "Аккаунт создан", 3);
+                LoadStage stage = new LoadStage("/coursework/view/main.fxml", confirmPassword);
+            } else {
+                Alert alert = new Alert(AlertType.INFORMATION, "", "Пароль не совпадает");
+                password.clear();
+                confirmPassword.clear();
             }
+        } else {
+            Alert alert = new Alert(AlertType.INFORMATION, "", "Пользователь с таким логином уже существует. Попробуйте другой");
+
         }
+
+
     }
 
     @FXML
     private void caancel(ActionEvent event) throws IOException {
-        LoadStage stage = new LoadStage("/coursework/view/login.fxml", password);
+        LoadStage stage = new LoadStage("/coursework/view/login.fxml", confirmPassword);
     }
 
-    private void requestFocus(TextField field) {
-        field.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.DOWN) {
-                    if (field.getUserData().equals("username")) {
-                        email.requestFocus();
-                    }
-                    if (field.getUserData().equals("email")) {
-                        password.requestFocus();
-                    }
-                    if (field.getUserData().equals("pass1")) {
-                        confirmPassword.requestFocus();
-                    }
-                }
-                if (event.getCode() == KeyCode.UP) {
-                    if (field.getUserData().equals("pass2")) {
-                        password.requestFocus();
-                    }
-                    if (field.getUserData().equals("pass1")) {
-                        email.requestFocus();
-                    }
-                    if (field.getUserData().equals("email")) {
-                        username.requestFocus();
-                    }
-                }
-            }
-        });
-    }
 
     private boolean validatePasswordLength() {
         if (password.getText().length() < 8 || confirmPassword.getText().length() < 8) {

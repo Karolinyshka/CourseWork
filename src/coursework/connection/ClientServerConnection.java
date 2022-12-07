@@ -1,26 +1,26 @@
-package coursework.network;
+package coursework.connection;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class ClientServerCommunication {
+public class ClientServerConnection {
     private final Socket socket;
-    private final ObjectInputStream inputStream;
     private final ObjectOutputStream outputStream;
+    private final ObjectInputStream inputStream;
 
-    public ClientServerCommunication(Socket socket) {
+    public ClientServerConnection(Socket socket) {
         this.socket = socket;
         try {
             this.outputStream = new ObjectOutputStream(socket.getOutputStream());
             this.inputStream = new ObjectInputStream(socket.getInputStream());
         } catch (IOException e) {
-            throw new RuntimeException("can't initialise", e);
+            throw new RuntimeException("cant initialise", e);
         }
     }
 
-    public void writeObject(Object object) {
+    public synchronized void writeObject(Object object) {
         try {
             outputStream.writeObject(object);
         } catch (IOException e) {
@@ -28,7 +28,7 @@ public class ClientServerCommunication {
         }
     }
 
-    public Object readObject() {
+    public synchronized Object readObject() {
         try {
             return inputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
@@ -36,14 +36,13 @@ public class ClientServerCommunication {
         }
     }
 
-    public void close() {
+    public void closeConnection() {
         try {
             inputStream.close();
-            outputStream.close();
             socket.close();
+            outputStream.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-
 }

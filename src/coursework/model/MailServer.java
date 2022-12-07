@@ -70,7 +70,7 @@ public class MailServer {
         ResultSet resultSet = null;
         String query = "SELECT * FROM MailServer";
         try {
-            connection = DatabaseConnection.Connect();
+            connection = DatabaseConnection.connect();
             preparedStatement = connection.prepareStatement(query);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -103,7 +103,7 @@ public class MailServer {
         ResultSet resultSet = null;
         String query = "SELECT * FROM MailServer";
         try {
-            connection = DatabaseConnection.Connect();
+            connection = DatabaseConnection.connect();
             preparedStatement = connection.prepareStatement(query);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {

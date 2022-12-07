@@ -1,6 +1,7 @@
 package coursework.controller;
 
 import com.jfoenix.controls.JFXButton;
+import coursework.utils.DBUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -46,50 +47,24 @@ public class Password implements Initializable {
         newpassword2.setTooltip(new Tooltip("The password must be at least 8 characters long"));
     }
 
+    //TODO:DONE
     @FXML
     private void changePassword(ActionEvent event) {
-        Connection conn = null;
-        PreparedStatement pre1 = null;
-        PreparedStatement pre2 = null;
-        ResultSet rs = null;
-        String query1 = "SELECT * FROM User WHERE ID = ? AND Password = ?";
-        String query2 = "UPDATE User SET Password = ? WHERE ID = ?";
         if (validateFields() && validatePasswordLength()) {
-            try {
-                conn = DatabaseConnection.Connect();
-                pre1 = conn.prepareStatement(query1);
-                pre2 = conn.prepareStatement(query2);
-                pre1.setInt(1, LoginController.userID);
-                pre1.setString(2, currentPassword.getText());
-                rs = pre1.executeQuery();
-                if (rs.next()) {
-                    if (newPassword.getText().equals(newpassword2.getText())) {
-                        pre2.setString(1, newpassword2.getText());
-                        pre2.setString(2, String.valueOf(LoginController.userID));
-                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                        alert.setTitle("Confirmation");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Save changes ?");
-                        Optional<ButtonType> choice = alert.showAndWait();
-                        if (choice.get() == ButtonType.OK) {
-                            pre2.executeUpdate();
-                            Notification notification = new Notification("Information", "Password changed", 3);
-                            change.setDisable(false);
-                            clearFields();
-                            disablePasswordFieldsandButtons();
-                        }
-                    } else {
-                        coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "Information", "Passwords don't match");
-                        newPassword.clear();
-                        newpassword2.clear();
-                    }
-                } else {
-                    coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "Information", "Current password is not correct");
-                }
-            } catch (SQLException ex) {
-                System.err.println(ex);
+            if (newPassword.getText().equals(newpassword2.getText())) {
+                String s = DBUtils.changePassword(LoginController.userID, currentPassword.getText(), newPassword.getText());
+                Notification notification = new Notification("Information", s, 3);
+                change.setDisable(false);
+                clearFields();
+                disablePasswordFieldsandButtons();
+
+            } else {
+                coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "Information", "Passwords don't match");
+                newPassword.clear();
+                newpassword2.clear();
             }
         }
+
     }
 
     @FXML
