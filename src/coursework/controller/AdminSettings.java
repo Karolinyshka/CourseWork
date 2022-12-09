@@ -36,13 +36,13 @@ public class AdminSettings implements Initializable {
 
     @FXML
     private void loadAdmininfo(ActionEvent event) throws IOException {
-        BorderPane pane = FXMLLoader.load(getClass().getResource("/librarymanagementsystem/view/editAdminDetails.fxml"));
+        BorderPane pane = FXMLLoader.load(getClass().getResource("/coursework/view/editAdminDetails.fxml"));
         borderPane.setCenter(pane);
     }
 
     @FXML
     private void loadSignInOptions(ActionEvent event) throws IOException {
-        BorderPane pane =  FXMLLoader.load(getClass().getResource("/librarymanagementsystem/view/changeAdminPassword.fxml"));
+        BorderPane pane =  FXMLLoader.load(getClass().getResource("/coursework//view/changeAdminPassword.fxml"));
         borderPane.setCenter(pane);
     }
 

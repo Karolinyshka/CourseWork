@@ -143,5 +143,4 @@ public class AdminPanelController implements Initializable {
         y = event.getSceneY();
     }
 
-
 }

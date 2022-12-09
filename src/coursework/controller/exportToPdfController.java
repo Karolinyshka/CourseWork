@@ -92,15 +92,4 @@ public class exportToPdfController implements Initializable {
         return flag;
     }
 
-
-
-    public static void animatePane(VBox box) {
-        TranslateTransition transition = new TranslateTransition(Duration.millis(200), box);
-        transition.setFromX(30);
-        transition.setToX(-30);
-        transition.play();
-    }
-
-
-
 }

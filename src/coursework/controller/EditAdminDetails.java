@@ -1,6 +1,7 @@
 package coursework.controller;
 
 import com.jfoenix.controls.JFXButton;
+import coursework.dto.AdminDto;
 import coursework.model.DatabaseConnection;
 import coursework.model.Notification;
 import coursework.utils.DBUtils;
@@ -11,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import org.sqlite.core.DB;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -53,7 +55,7 @@ public class EditAdminDetails implements Initializable {
 
     private boolean validateFields() {
         if (username.getText().isEmpty() || email.getText().isEmpty() || password.getText().isEmpty()) {
-          coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "", "Заполните все поля");
+            coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "", "Заполните все поля");
             return false;
         }
         return true;
@@ -65,96 +67,40 @@ public class EditAdminDetails implements Initializable {
         if (m.find() && m.group().equals(email.getText())) {
             return true;
         }
-      coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Email Validation", "Email is invalid");
+        coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Email Validation", "Email is invalid");
         return false;
     }
-    //TODO: edit
+
     private void fetchUserName() {
-        Connection conn = null;
-        PreparedStatement pre = null;
-        ResultSet rs = null;
-        String query = "SELECT Username FROM User";
-        try {
-            conn = DatabaseConnection.connect();
-            pre = conn.prepareStatement(query);
-            rs = pre.executeQuery();
-            user.setText(rs.getString(1));
-        } catch (SQLException ex) {
-            System.err.println(ex);
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (pre != null) {
-                    pre.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException ex) {
-                System.err.println(ex);
-            }
-        }
+        AdminDto adminDto = DBUtils.fetchUsername();
+        user.setText(adminDto.getUsername());
     }
-    //TODO: edit
+
     @FXML
     private void updateAdminInfo(ActionEvent event) {
-        Connection conn = null;
-        PreparedStatement pre1 = null;
-        PreparedStatement pre2 = null;
-        ResultSet rs = null;
-        String query1 = "UPDATE User SET Username = ?,Email = ? WHERE Password = ?";
-        String query2 = "SELECT * FROM User WHERE Usertype = ? AND Password = ?";
+        AdminDto adminDto = new AdminDto();
+        adminDto.setUsername(username.getText().trim());
+        adminDto.setPassword(password.getText().trim());
+        adminDto.setEmail(email.getText().trim());
         if (validateFields() && validateEmail()) {
-            try {
-                conn = DatabaseConnection.connect();
-                pre1 = conn.prepareStatement(query1);
-                pre2 = conn.prepareStatement(query2);
-                pre2.setString(1, "Administrator");
-                pre2.setString(2, password.getText().trim());
-                rs = pre2.executeQuery();
-                if (rs.next()) {
-                    pre1.setString(1, username.getText().trim());
-                    pre1.setString(2, email.getText().trim());
-                    pre1.setString(3, password.getText());
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("Confirmation");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Save changes ?");
-                    Optional<ButtonType> option = alert.showAndWait();
-                    if (option.get() == ButtonType.OK) {
-                        pre1.executeUpdate();
-                        fetchUserName();
-                        Notification notification = new Notification("", "Изменения сохранены", 3);
-                        password.clear();
-                    }
-                } else {
-                 coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "", "Ошибка в пароле");
-                    password.clear();
-                }
-            } catch (SQLException ex) {
-                System.err.println(ex);
-            } finally {
-                try {
-                    if (rs != null) {
-                        rs.close();
-                    }
-                    if (pre1 != null) {
-                        pre1.close();
-                    }
-                    if (pre2 != null) {
-                        pre2.close();
-                    }
-                    if (conn != null) {
-                        conn.close();
-                    }
-                } catch (SQLException ex) {
-                    System.err.println(ex);
-                }
-                loadAdminInformation();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation");
+            alert.setHeaderText(null);
+            alert.setContentText("Save changes ?");
+            Optional<ButtonType> option = alert.showAndWait();
+            if (option.get() == ButtonType.OK) {
+                DBUtils.updateAdminInfo(adminDto);
+                fetchUserName();
+                Notification notification = new Notification("", "Изменения сохранены", 3);
+                password.clear();
             }
+        } else {
+            coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "", "Ошибка в пароле");
+            password.clear();
         }
+
+        loadAdminInformation();
+
     }
 
     @FXML
@@ -163,39 +109,12 @@ public class EditAdminDetails implements Initializable {
         email.clear();
         loadAdminInformation();
     }
-    //TODO: edit
+
     private void loadAdminInformation() {
-//        DBUtils.loadAdminInfo(user);
-        String query = "SELECT * FROM User WHERE Usertype = ?";
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = DatabaseConnection.connect();
-            preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, "Administrator");
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                username.setText(resultSet.getString(4));
-                email.setText(resultSet.getString(5));
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(EditAdminDetails.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(EditAdminDetails.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+        AdminDto adminDto = DBUtils.loadAdminInfo();
+        username.setText(adminDto.getUsername());
+        email.setText(adminDto.getEmail());
+//        password.setText(adminDto.getPassword());
     }
 
     private void requestFocus(TextField field) {

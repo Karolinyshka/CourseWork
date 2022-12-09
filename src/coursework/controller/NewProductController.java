@@ -1,15 +1,15 @@
 package coursework.controller;
 
 import com.jfoenix.controls.JFXButton;
+import coursework.dto.BookDto;
+import coursework.utils.DBUtils;
 import de.jensd.fx.glyphs.octicons.OctIconView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -31,13 +31,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class NewProductController implements Initializable {
 
@@ -99,7 +96,7 @@ public class NewProductController implements Initializable {
     @FXML
     private ComboBox<String> comboBox;
     ContextMenu contextMenu;
-    String comboboxValue;
+
     @FXML
     private ContextMenu selectStudentContext;
     @FXML
@@ -142,18 +139,16 @@ public class NewProductController implements Initializable {
                 return max;
             }
         };
-        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-                spinner.setVisible(false);
-                loadData();
-            }
+        task.setOnSucceeded(event -> {
+            spinner.setVisible(false);
+            loadData();
         });
         Thread thread = new Thread(task);
         thread.setDaemon(true);
         thread.start();
         tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
+
     private void clearFields() {
         BookID.clear();
         Name.clear();
@@ -165,133 +160,75 @@ public class NewProductController implements Initializable {
         Section.clear();
         RemainingBooks.clear();
     }
-    private boolean validateName() {
-        Pattern p = Pattern.compile("[a-z A-Z # ; ' & 1-9 +]+");
-        Matcher m = p.matcher(bookName.getText());
-        if (m.find() && m.group().equals(bookName.getText())) {
-            return true;
-        } else {
-          coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Book name validation", "Please enter a valid book name!");
-            return false;
-        }
-    }
-    private boolean validateEdition() {
-        Pattern p = Pattern.compile("[0-9]+");
-        Matcher m = p.matcher(edition.getText());
-        if (m.find() && m.group().equals(edition.getText())) {
-            return true;
-        } else {
-          coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Book edition validation", "Please enter a valid book edition!");
-            return false;
-        }
-    }
+
+
     @FXML
     private void updateStudent(ActionEvent event) {
-        PreparedStatement pre = null;
-        Connection conn = null;
-        String query = "UPDATE Book SET Name = ?,Author = ?,Publisher = ?,Edition = ?,Quantity = ?,RemainingBooks = ?,Availability = ?,Section = ? WHERE BookID = ?";
-        try {
-            conn = DatabaseConnection.connect();
-             {
-                pre = conn.prepareStatement(query);
-                pre.setString(1, Name.getText().trim());
-                pre.setString(2, Author.getText().trim());
-                pre.setString(3, Publisher.getText().trim());
-                pre.setString(4, Edition.getText().trim());
-                pre.setString(5, Quantity.getText().trim());
-                pre.setString(6, RemainingBooks.getText().trim());
-                 pre.setString(7, Availability.getText().trim());
-                pre.setString(8, Section.getText().trim());
-                pre.setString(9, BookID.getText().trim());
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Confirmation");
-                alert.setHeaderText(null);
-                alert.setContentText("Save changes ?");
-                Optional<ButtonType> choice = alert.showAndWait();
-                if (choice.get() == ButtonType.OK) {
-                    pre.executeUpdate();
-                    loadData();
-                    clearFields();
-                    Notification notification = new Notification("Message", "Student information successfully updated", 3);
-                    BookID.setEditable(true);
-                    update.setVisible(false);
-                    delete.setVisible(false);
-                    save.setDisable(false);
-                    searchTextField.clear();
-                }
-            }
-        } catch (SQLException ex) {
-            System.err.println(ex);
+        BookDto bookDto = new BookDto(Name.getText().trim(), Author.getText().trim(),
+                Publisher.getText().trim(), Edition.getText().trim(), Quantity.getText().trim(),
+                RemainingBooks.getText().trim(), Availability.getText().trim(),
+                Section.getText().trim(), BookID.getText().trim());
+        DBUtils.updateStudent(bookDto);
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation");
+        alert.setHeaderText(null);
+        alert.setContentText("Save changes ?");
+        Optional<ButtonType> choice = alert.showAndWait();
+        if (choice.get() == ButtonType.OK) {
+            loadData();
+            clearFields();
+            Notification notification = new Notification("Message", "Student information successfully updated", 3);
+            BookID.setEditable(true);
+            update.setVisible(false);
+            delete.setVisible(false);
+            save.setDisable(false);
+            searchTextField.clear();
         }
+
+
     }
+
     @FXML
     private void saveBook(ActionEvent event) {
-        PreparedStatement pre = null;
-        Connection conn = null;
-        String query = "INSERT INTO Book (BookID,Name,Author,Publisher,Edition,Quantity,RemainingBooks,Availability,Section) VALUES (?,?,?,?,?,?,?,?,?)";
-        try {
-            conn = DatabaseConnection.connect();
-            pre = conn.prepareStatement(query);
-            if (checkIFIDExist()) {
-                pre.setString(1, BookID.getText().trim());
-                pre.setString(2, Name.getText().trim());
-                pre.setString(3, Author.getText().trim());
-                pre.setString(4, Publisher.getText().trim());
-                pre.setString(5, Edition.getText().trim());
-                pre.setString(6, Quantity.getText().trim());
-                pre.setString(7, RemainingBooks.getText().trim());
-                pre.setString(8, Availability.getText().trim());
-                pre.setString(9, Section.getText().trim());
-                pre.executeUpdate();
-                loadData();
-                Notification notification = new Notification("Message", "Student successfully added", 3);
-                clearFields();
-                save.setDisable(false);
-            }
-        } catch (SQLException e) {
-            System.err.println(e);
+        BookDto bookDto = new BookDto(Name.getText().trim(), Author.getText().trim(),
+                Publisher.getText().trim(), Edition.getText().trim(), Quantity.getText().trim(),
+                RemainingBooks.getText().trim(), Availability.getText().trim(),
+                Section.getText().trim(), BookID.getText().trim());
+
+        if (checkIFIDExist()) {
+            DBUtils.saveBook(bookDto);
+            loadData();
+            Notification notification = new Notification("Message", "Student successfully added", 3);
+            clearFields();
+            save.setDisable(false);
         }
+
     }
+
     @FXML
     private void deleteStudentRecord(ActionEvent event) {
-            Connection connection = null;
-            PreparedStatement preparedStatement = null;
-            Book librarian = (Book) tableView.getSelectionModel().getSelectedItem();
-            if (librarian == null) {
-                Notification notification = new Notification("Information", "Select librarian record to delete", 3);
-            } else {
-                try {
-                    connection = DatabaseConnection.connect();
-                    preparedStatement = connection.prepareStatement("DELETE FROM Book WHERE BookID = ?");
-                    preparedStatement.setString(1, librarian.getBookID());
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("Confimation");
-                    alert.setContentText("Are you sure you want to delete " + " ?");
-                    alert.setHeaderText(null);
-                    Optional<ButtonType> optional = alert.showAndWait();
-                    if (optional.get() == ButtonType.OK) {
-                        preparedStatement.executeUpdate();
-                        Notification notification = new Notification("Information", "Libraian record successfully deleted", 3);
-                        clearFields();
-                        Name.requestFocus();
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-                } finally {
-                    try {
-                        if (preparedStatement != null) {
-                            preparedStatement.close();
-                        }
-                        if (connection != null) {
-                            connection.close();
-                        }
-                    } catch (SQLException ex) {
-                        Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    loadData();
-                }
-            }
+        Book librarian = (Book) tableView.getSelectionModel().getSelectedItem();
+
+        if (librarian == null) {
+            Notification notification = new Notification("Information", "Select librarian record to delete", 3);
+        } else {
+            DBUtils.deleteStudentRecord(librarian.getBookID());
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confimation");
+            alert.setContentText("Are you sure you want to delete " + " ?");
+            alert.setHeaderText(null);
+            Optional<ButtonType> optional = alert.showAndWait();
+
+            Notification notification = new Notification("Information", "Libraian record successfully deleted", 3);
+            clearFields();
+            Name.requestFocus();
+
         }
+        loadData();
+    }
+
 
     @FXML
     private void searchBook(KeyEvent event) {
@@ -325,6 +262,7 @@ public class NewProductController implements Initializable {
             tableView.getItems().setAll(sortedList);
         });
     }
+
     @FXML
     private void cancel(ActionEvent event) {
         clearFields();
@@ -335,173 +273,75 @@ public class NewProductController implements Initializable {
         tableView.getSelectionModel().clearSelection();
         searchTextField.clear();
     }
+
     @FXML
-    private void deleteStudent(ActionEvent event) {
-        PreparedStatement pre = null;
-        PreparedStatement pre2 = null;
-        PreparedStatement pre3 = null;
-        PreparedStatement pre4 = null;
-        PreparedStatement insert = null;
-        Connection conn = null;
-        ResultSet rs2 = null;
-        ResultSet rs3 = null;
-        ResultSet rs4 = null;
-        String query = "DELETE FROM Book WHERE BookID = ?";
-        String query2 = "SELECT * FROM IssueBook WHERE BookID = ?";
-        String query3 = "SELECT Name FROM Book WHERE BookID = ?";
-        String select = "SELECT * FROM Book WHERE BookId = ?";
-        String insertQuery = "INSERT INTO Arhieve (BookID,Name,Author,Publisher,Edition,Quantity,RemainingBooks,Availability,Section) VALUES (?,?,?,?,?,?,?,?,?)";
-        try {
-            conn = DatabaseConnection.connect();
-            pre2 = conn.prepareStatement(query2);
-            pre3 = conn.prepareStatement(query3);
-            pre4 = conn.prepareStatement(select);
-            insert = conn.prepareStatement(insertQuery);
-            pre2.setString(1, BookID.getText());
-            pre3.setString(1, BookID.getText());
-            rs2 = pre2.executeQuery();
-            if (rs2.next() ) {
-                rs3 = pre3.executeQuery();
-                String stuName = rs3.getString("Name");
-              coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "Information", stuName + " is holding a book");
-            } else {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Confirmation");
-                alert.setHeaderText(null);
-                alert.setContentText("Are you sure you want to archieve this student record ?");
-                Optional<ButtonType> choice = alert.showAndWait();
-                if (choice.get() == ButtonType.OK) {
-                    pre4.setString(1, BookID.getText());
-                    rs4 = pre4.executeQuery();
-                    while (rs4.next()) {
-                        insert.setString(1, rs4.getString(1));
-                        insert.setString(2, rs4.getString(2));
-                        insert.setString(3, rs4.getString(3));
-                        insert.setString(4, rs4.getString(4));
-                        insert.setString(5, rs4.getString(5));
-                        insert.setString(6, rs4.getString(6));
-                        insert.setString(7, rs4.getString(7));
-                        insert.setString(8, rs4.getString(8));
-                        insert.setString(9, rs4.getString(9));
-                    }
-                    insert.executeUpdate();
-                    pre = conn.prepareStatement(query);
-                    pre.setString(1, BookID.getText());
-                    pre.executeUpdate();
-                    loadData();
-                    save.setDisable(false);
-                    update.setVisible(false);
-                    delete.setVisible(false);
-                    BookID.setEditable(true);
-                    Notification notification = new Notification("Information", "Student record successfully moved to archieved student list", 3);
-                    clearFields();
-                }
-            }
-        } catch (SQLException ex) {
-            System.err.println(ex);
-        }
+    private void deleteStudent() {
+        DBUtils.deleteStudent(BookID.getText());
+        loadData();
+        save.setDisable(false);
+        update.setVisible(false);
+        delete.setVisible(false);
+        BookID.setEditable(true);
+        Notification notification = new Notification("Information", "Student record successfully moved to archieved student list", 3);
+        clearFields();
     }
 
     private void loadArchievedRecord() {
         data.clear();
-        Connection conn = null;
-        PreparedStatement pre = null;
-        ResultSet rs = null;
-        String query = "SELECT * FROM Arhieve";
-        try {
-            conn = DatabaseConnection.connect();
-            pre = conn.prepareStatement(query);
-            rs = pre.executeQuery();
-            while (rs.next()) {
-                data.add(new Book(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5), rs.getInt(6), rs.getInt(7), rs.getString(8), rs.getString(9)));
-            }
-            tableView.getItems().setAll( data);
-        } catch (SQLException ex) {
-            System.err.println(ex);
-        }
+        List<BookDto> bookDtoList = DBUtils.loadArchievedRecord();
+        bookDtoList.forEach(bookDto -> {
+            System.out.println(bookDto);
+            Book book = new Book(bookDto.getBookId(),bookDto.getName(),
+                    bookDto.getAuthor(),bookDto.getPublisher(),
+                    Integer.parseInt( bookDto.getEdition()),Integer.parseInt(bookDto.getQuantity()),Integer.parseInt(bookDto.getRemainingBooks()),
+                    bookDto.getAvailability(),bookDto.getSection());
+            data.add(book);
+        });
+        tableView.getItems().setAll(data);
     }
 
     private void unArchiveRecord() {
-        String insert = "INSERT INTO Book (BookID,Name,Author,Publisher,Edition,Quantity,RemainingBooks,Availability,Section) VALUES (?,?,?,?,?,?,?,?,?)";
-        String deleteQuery = "DELETE FROM Arhieve WHERE BookID = ?";
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        PreparedStatement preparedStatement1 = null;
         Book student = (Book) tableView.getSelectionModel().getSelectedItem();
+
+        BookDto bookDto = new BookDto(student.getBookName(), student.getBookAuthor(), student.getBookPublisher(), String.valueOf(student.getBookEdition()),
+                String.valueOf(student.getBookQuantity()), String.valueOf(student.getRemainingBooks()), student.getAvailability(), student.getBookSection(), student.getBookID());
         if (student == null) {
             Notification notification = new Notification("Information", "No record selected", 3);
         }
         if (student != null) {
-            try {
-                connection = DatabaseConnection.connect();
-                preparedStatement = connection.prepareStatement(insert);
-                preparedStatement1 = connection.prepareStatement(deleteQuery);
-                preparedStatement.setString(1, student.getBookID());
-                preparedStatement.setString(2, student.getBookName());
-                preparedStatement.setString(3, student.getBookAuthor());
-                preparedStatement.setString(4, student.getBookPublisher());
-                preparedStatement.setInt(5, student.getBookEdition());
-                preparedStatement.setInt(6, student.getBookQuantity());
-                preparedStatement.setInt(7, student.getRemainingBooks());
-                preparedStatement.setString(8, student.getAvailability());
-                preparedStatement.setString(9, student.getBookSection());
-
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Вернуть к текущим товарам");
-                alert.setContentText("Are you sure you want to unarchieve " + student.getBookName() + " record ?");
-                alert.setHeaderText(null);
-                Optional<ButtonType> optional = alert.showAndWait();
-                if (optional.get() == ButtonType.OK) {
-                    preparedStatement1.setString(1, student.getBookID());
-                    preparedStatement.executeUpdate();
-                    preparedStatement1.executeUpdate();
-                    Notification notification = new Notification("Information", "Student record successfully moved to archieved student records", 3);
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(Clients.class.getName()).log(Level.SEVERE, null, ex);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Вернуть к текущим товарам");
+            alert.setContentText("Are you sure you want to unarchieve " + student.getBookName() + " record ?");
+            alert.setHeaderText(null);
+            Optional<ButtonType> optional = alert.showAndWait();
+            if (optional.get() == ButtonType.OK) {
+                DBUtils.unArchiveRecord(bookDto);
+                Notification notification = new Notification("Information", "Student record successfully moved to archieved student records", 3);
             }
-            loadArchievedRecord();
         }
+        loadArchievedRecord();
+
     }
 
     private void loadData() {
         data.clear();
-        PreparedStatement pre = null;
-        Connection conn = null;
-        ResultSet rs = null;
-        String query = "SELECT * FROM Book order by BookID";
-        try {
-            conn = DatabaseConnection.connect();
-            pre = conn.prepareStatement(query);
-            rs = pre.executeQuery();
-            while (rs.next()) {
-                data.add(new Book(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5), rs.getInt(6), rs.getInt(7), rs.getString(8), rs.getString(9)));
-            }
-            tableView.getItems().setAll( data);
-        } catch (SQLException e) {
-            System.err.println(e);
-        }
+        List<BookDto> bookDtos = DBUtils.loadData();
+        bookDtos.forEach(bookDto -> {
+            System.out.println(bookDto);
+            Book book = new Book(bookDto.getBookId(),bookDto.getName(),
+                    bookDto.getAuthor(),bookDto.getPublisher(),
+                    Integer.parseInt( bookDto.getEdition()),Integer.parseInt(bookDto.getQuantity()),Integer.parseInt(bookDto.getRemainingBooks()),
+                    bookDto.getAvailability(),bookDto.getSection());
+            data.add(book);
+        });
+        tableView.getItems().setAll(data);
 
     }
+
     private boolean checkIFIDExist() {
-        PreparedStatement pre = null;
-        Connection conn = null;
-        ResultSet rs = null;
-        String query = "SELECT * FROM Book WHERE BookID = ?";
-        try {
-            conn = DatabaseConnection.connect();
-            pre = conn.prepareStatement(query);
-            pre.setString(1, BookID.getText());
-            rs = pre.executeQuery();
-            if (rs.next()) {
-              coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "ID validation", "Student id already exist");
-                return false;
-            }
-        } catch (SQLException e) {
-            System.err.println(e);
-        }
-        return true;
+        return DBUtils.checkIFIDExist(BookID.getText());
     }
+
     @FXML
     private void fetchStudentWithKey(KeyEvent event) {
         if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN) {
@@ -545,13 +385,15 @@ public class NewProductController implements Initializable {
         sectionCol.setCellValueFactory(new PropertyValueFactory<>("bookSection"));
         availability.setCellValueFactory(new PropertyValueFactory<>("availability"));
     }
+
+    //TODO:???
     @FXML
     private void fetchStudentFeesDetails(MouseEvent event) {
         Connection conn = null;
         PreparedStatement pre = null;
         ResultSet rs = null;
         String query = "SELECT * FROM Book WHERE BookID = ?";
-        Book stu =(Book) tableView.getSelectionModel().getSelectedItem();
+        Book stu = (Book) tableView.getSelectionModel().getSelectedItem();
         if (stu == null) {
         }
         if (stu != null) {

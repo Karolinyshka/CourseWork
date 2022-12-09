@@ -30,8 +30,6 @@ public class CreateAccountController implements Initializable {
     @FXML
     private Label close;
     @FXML
-    private Label minimize;
-    @FXML
     private TextField username;
     @FXML
     private TextField name;

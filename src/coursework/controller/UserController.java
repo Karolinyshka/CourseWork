@@ -4,6 +4,9 @@ package coursework.controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import coursework.dto.LibrarianDto;
+import coursework.model.Book;
+import coursework.utils.DBUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -31,6 +34,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
@@ -44,12 +48,6 @@ public class UserController implements Initializable {
 
     @FXML
     private TextField searchTextField;
-    @FXML
-    private JFXButton cancel;
-    @FXML
-    private JFXButton save;
-    @FXML
-    private JFXButton importData;
     @FXML
     private TableView<Librarian> librarianTable;
     @FXML
@@ -119,54 +117,43 @@ public class UserController implements Initializable {
     }
 
     private void requestFocus(TextField field) {
-        field.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.DOWN) {
-                    if (field.getUserData().equals("firstName")) {
-                        lastName.requestFocus();
-                    }
-                    if (field.getUserData().equals("lastName")) {
-                        userName.requestFocus();
-                    }
-                    if (field.getUserData().equals("username")) {
-                        emailAddress.requestFocus();
-                    }
-                    if (field.getUserData().equals("email")) {
-                        password1.requestFocus();
-                    }
-                    if (field.getUserData().equals("pass1")) {
-                        password2.requestFocus();
-                    }
+        field.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.DOWN) {
+                if (field.getUserData().equals("firstName")) {
+                    lastName.requestFocus();
                 }
-                if (event.getCode() == KeyCode.UP) {
-                    if (field.getUserData().equals("pass2")) {
-                        password1.requestFocus();
-                    }
-                    if (field.getUserData().equals("pass1")) {
-                        emailAddress.requestFocus();
-                    }
-                    if (field.getUserData().equals("email")) {
-                        userName.requestFocus();
-                    }
-                    if (field.getUserData().equals("username")) {
-                        lastName.requestFocus();
-                    }
-                    if (field.getUserData().equals("lastName")) {
-                        firstName.requestFocus();
-                    }
+                if (field.getUserData().equals("lastName")) {
+                    userName.requestFocus();
+                }
+                if (field.getUserData().equals("username")) {
+                    emailAddress.requestFocus();
+                }
+                if (field.getUserData().equals("email")) {
+                    password1.requestFocus();
+                }
+                if (field.getUserData().equals("pass1")) {
+                    password2.requestFocus();
+                }
+            }
+            if (event.getCode() == KeyCode.UP) {
+                if (field.getUserData().equals("pass2")) {
+                    password1.requestFocus();
+                }
+                if (field.getUserData().equals("pass1")) {
+                    emailAddress.requestFocus();
+                }
+                if (field.getUserData().equals("email")) {
+                    userName.requestFocus();
+                }
+                if (field.getUserData().equals("username")) {
+                    lastName.requestFocus();
+                }
+                if (field.getUserData().equals("lastName")) {
+                    firstName.requestFocus();
                 }
             }
         });
     }
-
-    @FXML
-    private void minimize(MouseEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setIconified(true);
-    }
-
-
 
     @FXML
     private void cancel(ActionEvent event) {
@@ -209,7 +196,7 @@ public class UserController implements Initializable {
         if (M.find() && M.group().equals(field.getText())) {
             return true;
         } else {
-          coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Name validation", field.getUserData() + " is invalid");
+            coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Name validation", field.getUserData() + " is invalid");
             return false;
         }
     }
@@ -220,14 +207,14 @@ public class UserController implements Initializable {
         if (M.find() && M.group().equals(emailAddress.getText())) {
             return true;
         } else {
-          coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Email validation", "Please enter a valid email address!");
+            coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Email validation", "Please enter a valid email address!");
             return false;
         }
     }
 
     private boolean validateFields() {
         if (firstName.getText().isEmpty() || lastName.getText().isEmpty() || userName.getText().isEmpty() || emailAddress.getText().isEmpty() || password1.getText().isEmpty() || password2.getText().isEmpty()) {
-          coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Fields validation", "Please enter in all fields!");
+            coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Fields validation", "Please enter in all fields!");
             return false;
         }
         return true;
@@ -241,62 +228,35 @@ public class UserController implements Initializable {
         String query = "INSERT INTO User (Firstname, Lastame,Username, Email,Password,Usertype) VALUES (?,?,?,?,?,?)";
         String update = "UPDATE User SET Firstname = ?, Lastame = ?,Username = ?, Email = ?,Password = ? WHERE ID = ?";
         if (validateFields() && validateName(firstName) && validateName(lastName) && validateName(userName) && validateEmail() && validatePasswordLength()) {
-            try {
-                if (isEditableMode) {
-                    connection = DatabaseConnection.connect();
-                    preparedStatement = connection.prepareStatement(update);
-                    if (validatePasswords(password1, password2)) {
-                        preparedStatement.setString(1, firstName.getText());
-                        preparedStatement.setString(2, lastName.getText());
-                        preparedStatement.setString(3, userName.getText());
-                        preparedStatement.setString(4, emailAddress.getText());
-                        preparedStatement.setString(5, password1.getText());
-                        preparedStatement.setInt(6, id);
-                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                        alert.setTitle("Confirmation");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Save changes ?");
-                        Optional<ButtonType> optional = alert.showAndWait();
-                        if (optional.get() == ButtonType.OK) {
-                            preparedStatement.executeUpdate();
-                            Notification notification = new Notification("Information", "Librarian record successfully updated", 3);
-                            clearFields();
-                            firstName.requestFocus();
-                            id = 0;
-                            isEditableMode = false;
-                        }
-                    }
-                } else {
-                    connection = DatabaseConnection.connect();
-                    preparedStatement = connection.prepareStatement(query);
-                    if (checkIfUsernameExists(userName.getText()) && validatePasswords(password1, password2)) {
-                        preparedStatement.setString(1, firstName.getText());
-                        preparedStatement.setString(2, lastName.getText());
-                        preparedStatement.setString(3, userName.getText());
-                        preparedStatement.setString(4, emailAddress.getText());
-                        preparedStatement.setString(5, password1.getText());
-                        preparedStatement.setString(6, "Librarian");
-                        preparedStatement.executeUpdate();
-                        Notification notification = new Notification("Information", "Librarian record successfully added", 3);
+
+            if (isEditableMode) {
+                if (validatePasswords(password1, password2)) {
+                    LibrarianDto librarianDto = new LibrarianDto(id, firstName.getText(), lastName.getText(), userName.getText(), emailAddress.getText(), password1.getText());
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Confirmation");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Save changes ?");
+                    Optional<ButtonType> optional = alert.showAndWait();
+                    if (optional.get() == ButtonType.OK) {
+                        DBUtils.updateLibrarian(librarianDto);
+                        Notification notification = new Notification("Information", "Librarian record successfully updated", 3);
                         clearFields();
                         firstName.requestFocus();
+                        id = 0;
+                        isEditableMode = false;
                     }
                 }
-            } catch (SQLException ex) {
-                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-            } finally {
-                try {
-                    if (preparedStatement != null) {
-                        preparedStatement.close();
-                    }
-                    if (connection != null) {
-                        connection.close();
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            } else {
+                if (checkIfUsernameExists(userName.getText()) && validatePasswords(password1, password2)) {
+                    LibrarianDto librarianDto = new LibrarianDto(firstName.getText(), lastName.getText(), userName.getText(), emailAddress.getText(), password1.getText());
+                    DBUtils.saveLibrarian(librarianDto);
+                    Notification notification = new Notification("Information", "Librarian record successfully added", 3);
+                    clearFields();
+                    firstName.requestFocus();
                 }
-                loadData();
             }
+            loadData();
+
         }
     }
 
@@ -311,36 +271,13 @@ public class UserController implements Initializable {
 
     private void loadData() {
         data.clear();
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        String query = "SELECT * FROM User WHERE Usertype = ?";
-        try {
-            connection = DatabaseConnection.connect();
-            preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, "Librarian");
-            resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                data.add(new Librarian(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), DigestUtils.shaHex(resultSet.getString("Password"))));
-            }
-            librarianTable.setItems(data);
-        } catch (SQLException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+        List<LibrarianDto> librarianDtoList = DBUtils.loadDataLibrarian();
+        librarianDtoList.forEach(librarianDto -> {
+            System.out.println(librarianDto);
+            Librarian book = new Librarian(librarianDto.getId(), librarianDto.getFirstName(), librarianDto.getLastName(), librarianDto.getUserName(), librarianDto.getEmailAddress(), librarianDto.getPassword());
+            data.add(book);
+        });
+        librarianTable.setItems(data);
     }
 
     private void initializeColumns() {
@@ -353,7 +290,7 @@ public class UserController implements Initializable {
 
     @FXML
     private void loadDetailsToUpdate(ActionEvent event) {
-                Librarian librarian = (Librarian) librarianTable.getSelectionModel().getSelectedItem();
+        Librarian librarian = (Librarian) librarianTable.getSelectionModel().getSelectedItem();
         if (librarian == null) {
             Notification notification = new Notification("Information", "Select librarian record to update", 3);
         } else {
@@ -371,42 +308,22 @@ public class UserController implements Initializable {
 
     @FXML
     private void deleteLibrarian(ActionEvent event) {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
         Librarian librarian = (Librarian) librarianTable.getSelectionModel().getSelectedItem();
         if (librarian == null) {
             Notification notification = new Notification("Information", "Select librarian record to delete", 3);
         } else {
-            try {
-                connection = DatabaseConnection.connect();
-                preparedStatement = connection.prepareStatement("DELETE FROM User WHERE ID = ?");
-                preparedStatement.setInt(1, librarian.getId());
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Confimation");
-                alert.setContentText("Are you sure you want to delete " + librarian.getFirstName() + " " + librarian.getLastName() + " ?");
-                alert.setHeaderText(null);
-                Optional<ButtonType> optional = alert.showAndWait();
-                if (optional.get() == ButtonType.OK) {
-                    preparedStatement.executeUpdate();
-                    Notification notification = new Notification("Information", "Libraian record successfully deleted", 3);
-                    clearFields();
-                    firstName.requestFocus();
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-            } finally {
-                try {
-                    if (preparedStatement != null) {
-                        preparedStatement.close();
-                    }
-                    if (connection != null) {
-                        connection.close();
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                loadData();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confimation");
+            alert.setContentText("Are you sure you want to delete " + librarian.getFirstName() + " " + librarian.getLastName() + " ?");
+            alert.setHeaderText(null);
+            Optional<ButtonType> optional = alert.showAndWait();
+            if (optional.get() == ButtonType.OK) {
+                DBUtils.deleteLibrarian(librarian.getId());
+                Notification notification = new Notification("Information", "Libraian record successfully deleted", 3);
+                clearFields();
+                firstName.requestFocus();
             }
+            loadData();
         }
     }
 
@@ -421,36 +338,12 @@ public class UserController implements Initializable {
     }
 
     private boolean checkIfUsernameExists(String username) {
-        String query = "SELECT * FROM User WHERE Username = ?";
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = DatabaseConnection.connect();
-            preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, username);
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-              coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "Username Validation", "Another Librarian is using this username");
-                return false;
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        boolean check = DBUtils.checkIfUsernameExists(username);
+        if (!check) {
+            coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.INFORMATION, "Username Validation", "Another Librarian is using this username");
+            return false;
         }
+
         return true;
     }
 
@@ -458,7 +351,7 @@ public class UserController implements Initializable {
         if (password1.getText().equals(password2.getText())) {
             return true;
         }
-      coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Information", "Passwords don't match.");
+        coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Information", "Passwords don't match.");
         password1.clear();
         password2.clear();
         password1.requestFocus();
@@ -467,7 +360,7 @@ public class UserController implements Initializable {
 
     private boolean validatePasswordLength() {
         if (password1.getText().length() < 8 || password2.getText().length() < 8) {
-          coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Password length validation", "The password must be at least 8 characters long");
+            coursework.model.Alert alert = new coursework.model.Alert(Alert.AlertType.ERROR, "Password length validation", "The password must be at least 8 characters long");
             return false;
         }
         return true;
